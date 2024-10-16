@@ -39,19 +39,18 @@ private:
     VideoDecoder *video_decoder=nullptr;
     QOpenGLShaderProgram *shaderProgram;
     QOpenGLTexture *texture;
+    GLuint textureID;
     QImage currentFrame;
     uchar *dstImageData=nullptr;
     int dstImageWidth=800;
     int dstImageHeight=600;
+    bool finished = false;
 signals:
     void reject(int err);//void resolve();
 public slots:
     void rejectCallback(int err);
+    void refresh();
 
-
-    // QWidget interface
-protected:
-    virtual void resizeEvent(QResizeEvent *event) override;
 };
 
 }
