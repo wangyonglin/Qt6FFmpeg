@@ -1,5 +1,5 @@
-#ifndef QFFMPEGPLAYER_H
-#define QFFMPEGPLAYER_H
+#ifndef QYUV420PLAYER_H
+#define QYUV420PLAYER_H
 
 #include <QObject>
 #include <QOpenGLFunctions>
@@ -15,12 +15,12 @@
 #include "libQt6FFmpeg_global.h"
 
 namespace Qt6FFmpeg {
-class LIBQT6FFMPEG_EXPORT QFFmpegPlayer : public QOpenGLWidget,public QOpenGLFunctions
+class LIBQT6FFMPEG_EXPORT QYUV420Player : public QOpenGLWidget,public QOpenGLFunctions
 {
     Q_OBJECT
 public:
-    explicit QFFmpegPlayer(QWidget *parent = nullptr);
-    ~QFFmpegPlayer();
+    explicit QYUV420Player(QWidget *parent = nullptr);
+    ~QYUV420Player();
     void play(const QString & url);
     void pause();
     void resume();
@@ -28,26 +28,32 @@ public:
 
 
 private:
-    virtual void initializeGL();
-    virtual void resizeGL(int w,int h);
-    virtual void paintGL();
+
     FFmpegDemuxer *demuxer=nullptr;
     AudioDecoder *audio_decoder=nullptr;
     VideoDecoder *video_decoder=nullptr;
+
     QOpenGLShaderProgram m_program;
     QOpenGLBuffer vbo;
     int idY,idU,idV;
     int width,height;
-    uchar* ptr;
+   // uchar* ptr;
+    uint8_t *ptr;
 signals:
     void reject(int err);
     //void resolve();
 public slots:
    // void resolveCallback();
     void rejectCallback(int err);
+
+    // QOpenGLWidget interface
+protected:
+    virtual void initializeGL() override;
+    virtual void resizeGL(int w, int h) override;
+    virtual void paintGL() override;
 };
 
 }
 
 
-#endif // QFFMPEGPLAYER_H
+#endif // QYUV420PLAYER_H

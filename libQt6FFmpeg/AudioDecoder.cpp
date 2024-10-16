@@ -28,45 +28,6 @@ int AudioDecoder::running(FFmpegDemuxer *demuxer)
         qDebug() << "RunningDecoder failed" << errmsg;
         return ret;
     }
-    // this->audio_codec_ctx = avcodec_alloc_context3(NULL);
-
-    // this->audio_stream_index=av_find_best_stream(this->demuxer->ifmt_ctx, AVMEDIA_TYPE_AUDIO, -1, -1, NULL, 0);
-
-    // if( this->audio_stream_index>=0)
-    // {
-    //     this->audio_codecpar= this->demuxer->ifmt_ctx->streams[ this->audio_stream_index]->codecpar;
-    //     this->audio_pts_base= this->demuxer->ifmt_ctx->streams[ this->audio_stream_index]->time_base;
-    //     this->audio_pts_begin =  this->demuxer->ifmt_ctx->streams[ this->audio_stream_index]->start_time;
-    // }
-    // if((ret=avcodec_parameters_to_context(this->audio_codec_ctx, this->audio_codecpar)) < 0) {
-    //     char errmsg[AV_ERROR_MAX_STRING_SIZE];
-    //     av_make_error_string(errmsg,AV_ERROR_MAX_STRING_SIZE, ret);
-    //     qDebug() << tr("Failed to copy %0 codec parameters to decoder context").arg(errmsg);
-    //     avcodec_free_context(&this->audio_codec_ctx);
-    //     return ret;
-    // }
-    // // h264
-    // // h264_qsv  AV_CODEC_ID_H264
-    // //    avcodec_find_decoder_by_name()
-
-    // //    if(AV_CODEC_ID_H264 == codec_ctx_->codec_id)
-    // //        codec = avcodec_find_decoder_by_name("h264_qsv");
-    // //    else
-
-    // if(!(audio_codec = avcodec_find_decoder(this->audio_codec_ctx->codec_id))) {
-    //     qDebug() << "avcodec_find_decoder failed";
-    //     avcodec_free_context(&this->audio_codec_ctx);
-    //     return ret;
-    // }
-
-    // if((ret = avcodec_open2(this->audio_codec_ctx, audio_codec, NULL)) < 0) {
-    //     char errmsg[AV_ERROR_MAX_STRING_SIZE];
-    //     av_make_error_string(errmsg,AV_ERROR_MAX_STRING_SIZE, ret);
-    //     qDebug() << "avcodec_open2 failed [audio]" << errmsg;
-    //     avcodec_free_context(&this->audio_codec_ctx);
-    //     return ret;
-    // }
-
 
     ffmpegResample->init(this->dec_ctx,AV_CH_LAYOUT_STEREO,44100,AV_SAMPLE_FMT_S16);
     // int data_size = av_get_bytes_per_sample(AV_SAMPLE_FMT_S16);
@@ -97,9 +58,7 @@ void AudioDecoder::pause()
 {
     this->frameFinished=true;
     FFmpegThreader::pause();
-    this->audio_frame_queue->release();
-
-
+    this->audio_frame_queue->release();   
 }
 
 void AudioDecoder::resume()
@@ -114,7 +73,7 @@ void AudioDecoder::resume()
 
 void AudioDecoder::loop()
 {
-
+    int ret = -1;
     if(state()==Running && !frameFinished){
         if (this->demuxer->synchronizer->get_audio_synchronize() > this->demuxer->synchronizer->get_master_synchronize())
         {
@@ -123,7 +82,12 @@ void AudioDecoder::loop()
         }
         if(!this->demuxer->audio_pkt_queue->isEmpty()){
             if(this->audio_frame_queue->size() <3){
-                decoder(this->dec_ctx,this->demuxer->audio_pkt_queue,this->audio_frame_queue);
+                if((ret= DecodePacket(this->demuxer->audio_pkt_queue,this->audio_frame_queue)) <0 ){
+                    char errmsg[AV_ERROR_MAX_STRING_SIZE];
+                    av_make_error_string(errmsg,AV_ERROR_MAX_STRING_SIZE, ret);
+                    qDebug() << "running decoder failed [audio]" << errmsg;
+                    return ;
+                }
             }else{
                 QThread::usleep(200);
                 return;
@@ -148,35 +112,6 @@ void AudioDecoder::loop()
 
 
 
-void AudioDecoder::decoder(AVCodecContext *codec_ctx,FFmpegPacket *pkt_queue, FFmpegFrame *frame_queue)
-{
-    if(!codec_ctx)return;
-    if(pkt_queue->isEmpty())return;
-    AVPacket * pkt= pkt_queue->dequeue();
-    if(!pkt)return;
-    int ret = avcodec_send_packet(codec_ctx, pkt);
-    av_packet_free(&pkt);
-    if (ret < 0)
-    {
-        char errmsg[AV_ERROR_MAX_STRING_SIZE];
-        av_make_error_string(errmsg,AV_ERROR_MAX_STRING_SIZE, ret);
-        qDebug() << "avcodec_send_packet failed" << errmsg;
-        return ;
-    }
-    AVFrame* frame = av_frame_alloc();
-    if(!frame)return;
-    ret = avcodec_receive_frame(codec_ctx, frame);
-    if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF){
-        return ;
-    }else if (ret < 0) {
-        char errmsg[AV_ERROR_MAX_STRING_SIZE];
-        av_make_error_string(errmsg,AV_ERROR_MAX_STRING_SIZE, ret);
-        qDebug() << "avcodec_receive_frame failed" << errmsg;
-        return ;
-    }
-    frame_queue->enqueue(frame);
-    av_frame_free(&frame);
-}
 
 
 

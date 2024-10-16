@@ -1,5 +1,6 @@
 #include "FFmpegDecoder.h"
 
+
 FFmpegDecoder::FFmpegDecoder(QObject *parent)
     : FFmpegThreader{parent}
 {}
@@ -59,41 +60,34 @@ void FFmpegDecoder::ReleaseDecoder(){
         this->dec_ctx=nullptr;
     }
 }
-int FFmpegDecoder::DecodePacket(AVCodecContext *dec, const AVPacket *pkt){
-
-        int ret = 0;
-    AVFrame *frame;
-        // submit the packet to the decoder
-        ret = avcodec_send_packet(dec, pkt);
-        if (ret < 0) {
-            //fprintf(stderr, "Error submitting a packet for decoding (%s)\n", av_err2str(ret));
-            return ret;
-        }
-
-        // get all the available frames from the decoder
-        while (ret >= 0) {
-            ret = avcodec_receive_frame(dec, frame);
-            if (ret < 0) {
-                // those two return values are special and mean there is no output
-                // frame available, but there were no errors during decoding
-                if (ret == AVERROR_EOF || ret == AVERROR(EAGAIN))
-                    return 0;
-
-               // fprintf(stderr, "Error during decoding (%s)\n", av_err2str(ret));
-                return ret;
-            }
-
-            // write the frame data to output file
-            // if (dec->codec->type == AVMEDIA_TYPE_VIDEO)
-            //     ret = output_video_frame(frame);
-            // else
-            //     ret = output_audio_frame(frame);
-
-            av_frame_unref(frame);
-            if (ret < 0)
-                return ret;
-        }
-
-        return 0;
-
+int FFmpegDecoder::DecodePacket(FFmpegPacket *pkt_queue, FFmpegFrame *frame_queue)
+{
+    int ret = -1;
+    if(!this->dec_ctx)return ret;
+    if(pkt_queue->isEmpty())return ret;
+    AVPacket * pkt= pkt_queue->dequeue();
+    if(!pkt)return ret;
+    ret = avcodec_send_packet(this->dec_ctx, pkt);
+    av_packet_free(&pkt);
+    if (ret < 0)
+    {
+        char errmsg[AV_ERROR_MAX_STRING_SIZE];
+        av_make_error_string(errmsg,AV_ERROR_MAX_STRING_SIZE, ret);
+        qDebug() << "avcodec_send_packet failed" << errmsg;
+        return ret;
+    }
+    AVFrame* frame = av_frame_alloc();
+    if(!frame)return ret;
+    ret = avcodec_receive_frame(this->dec_ctx, frame);
+    if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF){
+        return ret;
+    }else if (ret < 0) {
+        char errmsg[AV_ERROR_MAX_STRING_SIZE];
+        av_make_error_string(errmsg,AV_ERROR_MAX_STRING_SIZE, ret);
+        qDebug() << "avcodec_receive_frame failed" << errmsg;
+        return ret;
+    }
+    frame_queue->enqueue(frame);
+    av_frame_free(&frame);
+    return 0;
 }

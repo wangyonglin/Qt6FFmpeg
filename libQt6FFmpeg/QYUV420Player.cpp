@@ -1,28 +1,29 @@
-#include "QFFmpegPlayer.h"
+#include "QYUV420Player.h"
 #include <QDebug>
 
 
-Qt6FFmpeg::QFFmpegPlayer::QFFmpegPlayer(QWidget *parent)
+Qt6FFmpeg::QYUV420Player::QYUV420Player(QWidget *parent)
     :QOpenGLWidget(parent),
     demuxer(new FFmpegDemuxer(this)),
     audio_decoder(new AudioDecoder(this)),
     video_decoder(new VideoDecoder(this))
 {
 
-    connect(demuxer,&FFmpegDemuxer::reject,this,&Qt6FFmpeg::QFFmpegPlayer::rejectCallback);
-    connect(video_decoder,&VideoDecoder::sigFirst,[=](uchar* p,int w,int h){
-        ptr = p;
+
+    connect(demuxer,&FFmpegDemuxer::reject,this,&Qt6FFmpeg::QYUV420Player::rejectCallback);
+    connect(this->video_decoder,&VideoDecoder::sigFirst,[=](uint8_t * data[],int w,int h){
+        ptr = *data;
         width = w;
         height = h;
     });
-    connect(video_decoder,&VideoDecoder::newFrame,[=](){
+    connect(this->video_decoder,&VideoDecoder::newFrame,[=](){
         update();
     });
 
 
 }
 
-Qt6FFmpeg::QFFmpegPlayer::~QFFmpegPlayer()
+Qt6FFmpeg::QYUV420Player::~QYUV420Player()
 {
 
     demuxer->release();
@@ -30,7 +31,7 @@ Qt6FFmpeg::QFFmpegPlayer::~QFFmpegPlayer()
     video_decoder->release();
 
 }
-void Qt6FFmpeg::QFFmpegPlayer::play(const QString &url)
+void Qt6FFmpeg::QYUV420Player::play(const QString &url)
 {
 
     demuxer->pause();
@@ -58,21 +59,21 @@ void Qt6FFmpeg::QFFmpegPlayer::play(const QString &url)
 
 }
 
-void Qt6FFmpeg::QFFmpegPlayer::pause()
+void Qt6FFmpeg::QYUV420Player::pause()
 {
     demuxer->pause();
     audio_decoder->pause();
     video_decoder->pause();
 }
 
-void Qt6FFmpeg::QFFmpegPlayer::resume()
+void Qt6FFmpeg::QYUV420Player::resume()
 {
     audio_decoder->resume();
     video_decoder->resume();
     demuxer->resume();
 }
 
-void Qt6FFmpeg::QFFmpegPlayer::stop()
+void Qt6FFmpeg::QYUV420Player::stop()
 {
 
 
@@ -83,7 +84,7 @@ void Qt6FFmpeg::QFFmpegPlayer::stop()
 
 
 
-void Qt6FFmpeg::QFFmpegPlayer::initializeGL()
+void Qt6FFmpeg::QYUV420Player::initializeGL()
 {
     initializeOpenGLFunctions();
     const char *vsrc =
@@ -141,14 +142,14 @@ void Qt6FFmpeg::QFFmpegPlayer::initializeGL()
     idV = ids[2];
 }
 
-void Qt6FFmpeg::QFFmpegPlayer::resizeGL(int w, int h)
+void Qt6FFmpeg::QYUV420Player::resizeGL(int w, int h)
 {
     if(h<=0) h=1;
 
     glViewport(0,0,w,h);
 }
 
-void Qt6FFmpeg::QFFmpegPlayer::paintGL()
+void Qt6FFmpeg::QYUV420Player::paintGL()
 {
     if(!ptr) return;
 
@@ -197,7 +198,7 @@ void Qt6FFmpeg::QFFmpegPlayer::paintGL()
 }
 
 
-void Qt6FFmpeg::QFFmpegPlayer::rejectCallback(int err)
+void Qt6FFmpeg::QYUV420Player::rejectCallback(int err)
 {
     emit reject(err);
 }

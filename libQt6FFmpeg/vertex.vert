@@ -1,14 +1,9 @@
-#ifdef GL_ES
-// Set default precision to medium
-precision mediump int;
-precision mediump float;
-#endif
-
-attribute vec4 vertex;
-attribute vec2 texCoord;
-varying vec2 texc;
-void main(void)
+#version 330 core
+layout (location = 0) in vec3 aPos;
+layout (location = 1) in vec2 aTexCoord;
+out vec2 TexCoord;
+void main()
 {
-    gl_Position = vertex;
-    texc = texCoord;
+    gl_Position = vec4(aPos, 1.0);
+    TexCoord = aTexCoord;
 }

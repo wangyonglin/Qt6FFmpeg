@@ -4,6 +4,8 @@
 #include <QObject>
 #include "QFFmpegHeaders.h"
 #include "FFmpegThreader.h"
+#include "FFmpegFrame.h"
+#include "FFmpegPacket.h"
 class FFmpegDecoder : public FFmpegThreader
 {
     Q_OBJECT
@@ -11,12 +13,13 @@ public:
     explicit FFmpegDecoder(QObject *parent = nullptr);
     int RunningDecoder(AVFormatContext *fmt_ctx, enum AVMediaType type);
     void ReleaseDecoder();
-    int DecodePacket(AVCodecContext *dec, const AVPacket *pkt);
+    int DecodePacket(FFmpegPacket *pkts, FFmpegFrame *frames);
 public:
     const AVCodec * dec=nullptr;
     AVCodecContext * dec_ctx=nullptr;
     AVStream *st;
     int stream_index =-1;
+
 signals:
 };
 
