@@ -1,8 +1,8 @@
-#include "QYUV420Player.h"
+#include "YUV420PPlayer.h"
 #include <QDebug>
 
 
-Qt6FFmpeg::QYUV420Player::QYUV420Player(QWidget *parent)
+Qt6FFmpeg::YUV420PPlayer::YUV420PPlayer(QWidget *parent)
     :QOpenGLWidget(parent),
     demuxer(new FFmpegDemuxer(this)),
     audio_decoder(new AudioDecoder(this)),
@@ -10,7 +10,7 @@ Qt6FFmpeg::QYUV420Player::QYUV420Player(QWidget *parent)
 {
 
 
-    connect(demuxer,&FFmpegDemuxer::reject,this,&Qt6FFmpeg::QYUV420Player::rejectCallback);
+    connect(demuxer,&FFmpegDemuxer::reject,this,&Qt6FFmpeg::YUV420PPlayer::rejectCallback);
     connect(this->video_decoder,&VideoDecoder::sigFirst,[=](uint8_t * data[],int w,int h){
         ptr = *data;
         width = w;
@@ -23,7 +23,7 @@ Qt6FFmpeg::QYUV420Player::QYUV420Player(QWidget *parent)
 
 }
 
-Qt6FFmpeg::QYUV420Player::~QYUV420Player()
+Qt6FFmpeg::YUV420PPlayer::~YUV420PPlayer()
 {
 
     demuxer->release();
@@ -31,7 +31,7 @@ Qt6FFmpeg::QYUV420Player::~QYUV420Player()
     video_decoder->release();
 
 }
-void Qt6FFmpeg::QYUV420Player::play(const QString &url)
+void Qt6FFmpeg::YUV420PPlayer::play(const QString &url)
 {
 
     demuxer->pause();
@@ -59,21 +59,21 @@ void Qt6FFmpeg::QYUV420Player::play(const QString &url)
 
 }
 
-void Qt6FFmpeg::QYUV420Player::pause()
+void Qt6FFmpeg::YUV420PPlayer::pause()
 {
     demuxer->pause();
     audio_decoder->pause();
     video_decoder->pause();
 }
 
-void Qt6FFmpeg::QYUV420Player::resume()
+void Qt6FFmpeg::YUV420PPlayer::resume()
 {
     audio_decoder->resume();
     video_decoder->resume();
     demuxer->resume();
 }
 
-void Qt6FFmpeg::QYUV420Player::stop()
+void Qt6FFmpeg::YUV420PPlayer::stop()
 {
 
 
@@ -84,7 +84,7 @@ void Qt6FFmpeg::QYUV420Player::stop()
 
 
 
-void Qt6FFmpeg::QYUV420Player::initializeGL()
+void Qt6FFmpeg::YUV420PPlayer::initializeGL()
 {
     initializeOpenGLFunctions();
     const char *vsrc =
@@ -142,14 +142,14 @@ void Qt6FFmpeg::QYUV420Player::initializeGL()
     idV = ids[2];
 }
 
-void Qt6FFmpeg::QYUV420Player::resizeGL(int w, int h)
+void Qt6FFmpeg::YUV420PPlayer::resizeGL(int w, int h)
 {
     if(h<=0) h=1;
 
     glViewport(0,0,w,h);
 }
 
-void Qt6FFmpeg::QYUV420Player::paintGL()
+void Qt6FFmpeg::YUV420PPlayer::paintGL()
 {
     if(!ptr) return;
 
@@ -198,7 +198,7 @@ void Qt6FFmpeg::QYUV420Player::paintGL()
 }
 
 
-void Qt6FFmpeg::QYUV420Player::rejectCallback(int err)
+void Qt6FFmpeg::YUV420PPlayer::rejectCallback(int err)
 {
     emit reject(err);
 }

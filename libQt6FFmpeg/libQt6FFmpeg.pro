@@ -58,11 +58,10 @@ SOURCES += \
     FFmpegSpeaker.cpp \
     FFmpegSynchronizer.cpp \
     FFmpegThreader.cpp \
-    QFFmpegTool.cpp \
-    QRGBAPlayer.cpp \
-    QYUV420Player.cpp \
+    RGBAPlayer.cpp \
     VideoDecoder.cpp \
-    VideoSwscaler.cpp
+    VideoSwscaler.cpp \
+    YUV420PPlayer.cpp
 
 HEADERS += \
     AudioDecoder.h \
@@ -76,10 +75,9 @@ HEADERS += \
     FFmpegSynchronizer.h \
     FFmpegThreader.h \
     QFFmpegHeaders.h \
-    QFFmpegTool.h \
-    QRGBAPlayer.h \
-    QYUV420Player.h \
+    RGBAPlayer.h \
     VideoSwscaler.h \
+    YUV420PPlayer.h \
     libQt6FFmpeg_global.h \
     VideoDecoder.h
 

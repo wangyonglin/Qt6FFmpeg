@@ -1,25 +1,26 @@
-#include "QRGBAPlayer.h"
+#include "RGBAPlayer.h"
 #include <QOpenGLExtraFunctions>
 #include <QDebug>
 #include <QImageReader>
 #include <QResizeEvent>
-Qt6FFmpeg::QRGBAPlayer::QRGBAPlayer(QWidget *parent)
+
+Qt6FFmpeg::RGBAPlayer::RGBAPlayer(QWidget *parent)
     :QOpenGLWidget(parent),
     demuxer(new FFmpegDemuxer(this)),
     audio_decoder(new AudioDecoder(this)),
     video_decoder(new VideoDecoder(this))
 {
-    connect(demuxer,&FFmpegDemuxer::reject,this,&Qt6FFmpeg::QRGBAPlayer::rejectCallback);
+    connect(demuxer,&FFmpegDemuxer::reject,this,&Qt6FFmpeg::RGBAPlayer::rejectCallback);
     connect(this->video_decoder,&VideoDecoder::sigFirst,[=](uint8_t * data[],int w,int h){
         dstImageData =*data;
         dstImageWidth=w;
         dstImageHeight=h;
     });
-    connect(this->video_decoder,&VideoDecoder::newFrame,this,&Qt6FFmpeg::QRGBAPlayer::refresh);
+    connect(this->video_decoder,&VideoDecoder::newFrame,this,&Qt6FFmpeg::RGBAPlayer::refresh);
 }
 
 
-void Qt6FFmpeg::QRGBAPlayer::play(const QString &url)
+void Qt6FFmpeg::RGBAPlayer::play(const QString &url)
 {
     demuxer->pause();
     audio_decoder->pause();
@@ -40,42 +41,41 @@ void Qt6FFmpeg::QRGBAPlayer::play(const QString &url)
     demuxer->resume();
 }
 
-void Qt6FFmpeg::QRGBAPlayer::pause()
+void Qt6FFmpeg::RGBAPlayer::pause()
 {
     demuxer->pause();
     audio_decoder->pause();
     video_decoder->pause();
 }
 
-void Qt6FFmpeg::QRGBAPlayer::resume()
+void Qt6FFmpeg::RGBAPlayer::resume()
 {
     audio_decoder->resume();
     video_decoder->resume();
     demuxer->resume();
 }
 
-void Qt6FFmpeg::QRGBAPlayer::stop()
+void Qt6FFmpeg::RGBAPlayer::stop()
 {
     audio_decoder->release();
     video_decoder->release();
     demuxer->release();
 }
 
-void Qt6FFmpeg::QRGBAPlayer::rejectCallback(int err)
+void Qt6FFmpeg::RGBAPlayer::rejectCallback(int err)
 {
     emit reject(err);
 }
 
 
 
-Qt6FFmpeg::QRGBAPlayer::~QRGBAPlayer()
-{
-    demuxer->release();
+Qt6FFmpeg::RGBAPlayer::~RGBAPlayer()
+{    demuxer->release();
     audio_decoder->release();
     video_decoder->release();
 }
 
-void Qt6FFmpeg::QRGBAPlayer::initializeGL()
+void Qt6FFmpeg::RGBAPlayer::initializeGL()
 {
     initializeOpenGLFunctions();
     glClearColor(0.0f, 0.0f, 0.0f,1.0f);  // 设置背景色
@@ -103,13 +103,13 @@ void Qt6FFmpeg::QRGBAPlayer::initializeGL()
     finished=true;
 }
 
-void Qt6FFmpeg::QRGBAPlayer::resizeGL(int w, int h)
+void Qt6FFmpeg::RGBAPlayer::resizeGL(int w, int h)
 {
     if(h<=0) h=1;
     glViewport(0,0,w,h);
 }
 
-void Qt6FFmpeg::QRGBAPlayer::paintGL()
+void Qt6FFmpeg::RGBAPlayer::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     if (!currentFrame.isNull()) {
@@ -131,7 +131,7 @@ void Qt6FFmpeg::QRGBAPlayer::paintGL()
     }
 }
 
-void Qt6FFmpeg::QRGBAPlayer::refresh()
+void Qt6FFmpeg::RGBAPlayer::refresh()
 {
     if(finished){
         QImage glImage(dstImageData,dstImageWidth,dstImageHeight,QImage::Format_RGBA8888);

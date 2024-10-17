@@ -1,5 +1,5 @@
-#ifndef QYUV420PLAYER_H
-#define QYUV420PLAYER_H
+#ifndef YUV420PPLAYER_H
+#define YUV420PPLAYER_H
 
 #include <QObject>
 #include <QOpenGLFunctions>
@@ -15,12 +15,12 @@
 #include "libQt6FFmpeg_global.h"
 
 namespace Qt6FFmpeg {
-class LIBQT6FFMPEG_EXPORT QYUV420Player : public QOpenGLWidget,public QOpenGLFunctions
+class LIBQT6FFMPEG_EXPORT YUV420PPlayer : public QOpenGLWidget,public QOpenGLFunctions
 {
     Q_OBJECT
 public:
-    explicit QYUV420Player(QWidget *parent = nullptr);
-    ~QYUV420Player();
+    explicit YUV420PPlayer(QWidget *parent = nullptr);
+    ~YUV420PPlayer();
     void play(const QString & url);
     void pause();
     void resume();
@@ -56,4 +56,4 @@ protected:
 }
 
 
-#endif // QYUV420PLAYER_H
+#endif // YUV420PPLAYER_H

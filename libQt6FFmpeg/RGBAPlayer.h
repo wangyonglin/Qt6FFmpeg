@@ -1,5 +1,5 @@
-#ifndef QRGBAPLAYER_H
-#define QRGBAPLAYER_H
+#ifndef RGBAPLAYER_H
+#define RGBAPLAYER_H
 
 
 #include <QObject>
@@ -17,13 +17,13 @@
 #include "libQt6FFmpeg_global.h"
 
 namespace Qt6FFmpeg {
-class LIBQT6FFMPEG_EXPORT QRGBAPlayer : public QOpenGLWidget,public QOpenGLFunctions
+class LIBQT6FFMPEG_EXPORT RGBAPlayer : public QOpenGLWidget,public QOpenGLFunctions
 {
     Q_OBJECT
 public:
 
-    explicit QRGBAPlayer(QWidget *parent = nullptr);
-    ~QRGBAPlayer();
+    explicit RGBAPlayer(QWidget *parent = nullptr);
+    ~RGBAPlayer();
     void play(const QString & url);
     void pause();
     void resume();
@@ -55,4 +55,4 @@ public slots:
 
 }
 
-#endif // QRGBAPLAYER_H
+#endif // RGBAPLAYER_H
