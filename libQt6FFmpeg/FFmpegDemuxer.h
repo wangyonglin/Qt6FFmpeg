@@ -12,7 +12,7 @@ class FFmpegDemuxer : public FFmpegThreader
 public:
     explicit FFmpegDemuxer(QObject *parent = nullptr);
     ~FFmpegDemuxer();
-    int running(const QString & url);
+    int demuxing(const QString & url);
     void release();
 public:
     FFmpegSynchronizer *synchronizer=nullptr;
@@ -36,6 +36,7 @@ private:
     virtual void loop() override;
 signals:
     void reject(int err);
+    void finished();
 };
 
 #endif // FFmpegDemuxer_H

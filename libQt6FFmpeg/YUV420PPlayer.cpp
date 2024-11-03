@@ -34,19 +34,19 @@ Qt6FFmpeg::YUV420PPlayer::~YUV420PPlayer()
 void Qt6FFmpeg::YUV420PPlayer::play(const QString &url)
 {
 
-    demuxer->pause();
+   demuxer->pause();
     audio_decoder->pause();
     video_decoder->pause();
 
 
     demuxer->synchronizer->init_synchronize();
-    if(demuxer->running(url)<0){
+    if(demuxer->demuxing(url)<0){
         return;
     }
-    if(audio_decoder->running(demuxer)<0){
+    if(audio_decoder->execution(demuxer)<0){
         return;
     }
-    if(video_decoder->running(demuxer)<0){
+    if(video_decoder->execution(demuxer)<0){
         return;
     }
 

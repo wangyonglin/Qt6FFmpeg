@@ -15,21 +15,24 @@ VideoDecoder::~VideoDecoder()
     this->stop();
 }
 
-int VideoDecoder::running(FFmpegDemuxer * demuxer,QFFmpegPixelFormat pix_fmt)
+int VideoDecoder::execution(FFmpegDemuxer * demuxer,QFFmpegPixelFormat pix_fmt)
 {
-
-    int ret = -1;
-    this->videoswscaler->SetFormat(pix_fmt);
-    this->demuxer=demuxer;
-    if(!this->isRunning())return ret;
-    if((ret=RunningDecoder(this->demuxer->ifmt_ctx, AVMEDIA_TYPE_VIDEO))<0){
-        char errmsg[AV_ERROR_MAX_STRING_SIZE];
-        av_make_error_string(errmsg,AV_ERROR_MAX_STRING_SIZE, ret);
-        qDebug() << "RunningDecoder failed" << errmsg;
-        return ret;
+    if(isRunning()){
+        int ret = -1;
+        this->videoswscaler->SetFormat(pix_fmt);
+        this->demuxer=demuxer;
+        if(!this->isRunning())return ret;
+        if((ret=decodeing(this->demuxer->ifmt_ctx, AVMEDIA_TYPE_VIDEO))<0){
+            char errmsg[AV_ERROR_MAX_STRING_SIZE];
+            av_make_error_string(errmsg,AV_ERROR_MAX_STRING_SIZE, ret);
+            qDebug() << "RunningDecoder failed" << errmsg;
+            return ret;
+        }
+        this->videoswscaler->ImageAllocate(this->dec_ctx);
+        emit sigFirst(this->videoswscaler->dstImagedata,this->dec_ctx->width, this->dec_ctx->height);
+        resume();
     }
-    this->videoswscaler->ImageAllocate(this->dec_ctx);
-    emit sigFirst(this->videoswscaler->dstImagedata,this->dec_ctx->width, this->dec_ctx->height);
+
     return 0;
 }
 
@@ -53,10 +56,10 @@ void VideoDecoder::loop()
         if(!this->demuxer->video_pkt_queue->isEmpty()){
             if(this->video_frame_queue->size()  < 3){
 
-                if((ret= this->DecodePacket(this->demuxer->video_pkt_queue,this->video_frame_queue)) <0 ){
+                if((ret= this->depacket(this->demuxer->video_pkt_queue,this->video_frame_queue)) <0 ){
                     char errmsg[AV_ERROR_MAX_STRING_SIZE];
                     av_make_error_string(errmsg,AV_ERROR_MAX_STRING_SIZE, ret);
-                    qDebug() << "running decoder failed [video]" << errmsg;
+                    qDebug() << "video depacket " << errmsg;
                     return ;
                 }
             }else{

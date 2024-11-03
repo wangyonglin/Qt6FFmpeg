@@ -1,152 +1,84 @@
  #   FFmpegPlayer 视频播放器模块 
 ```
-./ffmpeg configure -codecs | grep h264
+# Native compilation on ARM/ARM64 host
+
+# Build MPP
+mkdir -p ~/dev && cd ~/dev
+git clone -b jellyfin-mpp --depth=1 https://github.com/nyanmisaka/mpp.git rkmpp
+pushd rkmpp
+mkdir rkmpp_build
+pushd rkmpp_build
+cmake \
+    -DCMAKE_INSTALL_PREFIX=/home/linaro/Project/Qt6FFmpeg/libQt6FFmpeg \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DBUILD_SHARED_LIBS=ON \
+    -DBUILD_TEST=OFF \
+    ..
+make -j $(nproc)
+make install
+
+
+# Build RGA
+mkdir -p ~/dev && cd ~/dev
+git clone -b jellyfin-rga --depth=1 https://github.com/nyanmisaka/rk-mirrors.git rkrga
+meson setup rkrga rkrga_build \
+    --prefix=/home/linaro/Project/Qt6FFmpeg/libQt6FFmpeg \
+    --libdir=lib \
+    --buildtype=release \
+    --default-library=shared \
+    -Dcpp_args=-fpermissive \
+    -Dlibdrm=false \
+    -Dlibrga_demo=false
+meson configure rkrga_build
+ninja -C rkrga_build install
+
+# Build the minimal x264 (You can customize the configure and install prefix)
+git clone https://code.videolan.org/videolan/x264.git
+../configure \
+    --prefix=/home/linaro/Project/Qt6FFmpeg/libQt6FFmpeg \
+    --disable-cli \
+    --disable-asm \
+    --enable-shared=no \
+    --enable-static
+make -j $(nproc) 
+make install
+
+# Build the minimal FFmpeg (You can customize the configure and install prefix)
+mkdir -p ~/dev && cd ~/dev
+git clone --depth=1 https://github.com/nyanmisaka/ffmpeg-rockchip.git ffmpeg
+cd ffmpeg
+./configure --prefix=/home/linaro/Project/Qt6FFmpeg/libQt6FFmpeg \
+--enable-gpl \
+--enable-version3 \
+--enable-libdrm \
+--enable-rkmpp \
+--enable-rkrga \
+--enable-static \
+--enable-libx264 \
+--enable-openssl \
+--pkg-config-flags="--static" \
+--extra-cflags="-std=c11 -I/home/linaro/Project/Qt6FFmpeg/libQt6FFmpeg/include" \
+--extra-ldflags="-L/home/linaro/Project/Qt6FFmpeg/libQt6FFmpeg/lib" \
+--extra-libs="-lpthread -lm" \
+--enable-static \
+--disable-shared \
+..
+make -j $(nproc)
+
+# Try the compiled FFmpeg without installation
+./ffmpeg -decoders | grep rkmpp
+./ffmpeg -encoders | grep rkmpp
+./ffmpeg -filters | grep rkrga
+
+# Install FFmpeg to the prefix path
+make install
 ```
-## 原主使用的开发环境
+F & Q
+./config --prefix=/home/linaro/Project/Qt6FFmpeg/libQt6FFmpeg
+ERROR: OpenSSL <3.0.0 is incompatible with the gpl
 
-	Linux:	Ubuntu 20.04.6 LTS
-	Release:	20.04
-	Codename:	focal
-
-	FFmpeg4.4.1
-
-	Qt 5.12.8
-
-### 默认生成动态库文件
-
-```shell
-wangyonglin@wangyonglin-macmini:~/github/build-FFmpegPlayer-Rk3588_Buildroot_aarch64-Debug$ ls libFFmpegPlayer*
-libFFmpegPlayer.so    libFFmpegPlayer.so.1.0
-libFFmpegPlayer.so.1  libFFmpegPlayer.so.1.0.0
-```
-
- ### OpenGLFFmpegPlayer 采用 QOpenGLWidget opengl 渲染 Qimage
-
-```c++
-	// 使用例子
-	#include <QResizeEvent>
-	ChatWidget::ChatWidget(QWidget *parent)
-	    : QWidget(parent)
-
-	{
-	    ffmpegplayer=new OpenGLFFmpegPlayer(this);
-	    ffmpegplayer->resizeGL(800,600);
-	    ffmpegplayer->Play("https://cesium.com/public/SandcastleSampleData/big-buck-bunny_trailer.mp4");
-	}
-
-	ChatWidget::~ChatWidget()
-	{
-	    ffmpegplayer->Stop();
-
-	}
-
-	void ChatWidget::resizeEvent(QResizeEvent *event)
-	{
-	     ffmpegplayer->resize(event->size());
-	}
-```
-
-### FFmpegPlayer 采用 QWidget paintEvent QPainter 渲染 Qimage
-
-```c++
-	// 使用例子
-	#include <QResizeEvent>
-	ChatWidget::ChatWidget(QWidget *parent)
-	    : QWidget(parent)
-
-	{
-
-	    ffmpegplayer=new FFmpegPlayer(this);
-	    ffmpegplayer->resize(800,600);
-	    ffmpegplayer->Play("https://cesium.com/public/SandcastleSampleData/big-buck-bunny_trailer.mp4");
-	}
-
-	ChatWidget::~ChatWidget()
-	{
-	    ffmpegplayer->Stop();
-
-	}
-
-	void ChatWidget::resizeEvent(QResizeEvent *event)
-	{
-	     ffmpegplayer->resize(event->size());
-	}
-```
-### 主项目的 *.pro
-#### 增加需要的信赖库参考配置 ffmpeg  
-```pro
-   QT       += core gui multimedia opengl
-
-greaterThan(QT_MAJOR_VERSION, 5): QT += widgets openglwidgets
-
-CONFIG += c++17
-
-# The following define makes your compiler emit warnings if you use
-# any Qt feature that has been marked deprecated (the exact warnings
-# depend on your compiler). Please consult the documentation of the
-# deprecated API in order to know how to port your code away from it.
-DEFINES += QT_DEPRECATED_WARNINGS
-
-# You can also make your code fail to compile if it uses deprecated APIs.
-# In order to do so, uncomment the following line.
-# You can also select to disable deprecated APIs only up to a certain version of Qt.
-#DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
-
-
-
-CONFIG += debug_and_release
-CONFIG(debug, debug|release){
-    unix{
-        contains(QT_ARCH, arm64){
-        message("arm64")
-        INCLUDEPATH +=/home/wangyonglin/github/FFmpegPlayer
-        LIBS += -L/home/wangyonglin/github/build-FFmpegPlayer-Rk3588_Buildroot_aarch64-Debug \
-             -lFFmpegPlayer
-
-        INCLUDEPATH +=/wangyonglin/rootfs/usr/local/ffmpeg4.4.1/include
-        LIBS += -L/wangyonglin/rootfs/usr/local/ffmpeg4.4.1/lib \
-             -lavcodec \
-             -lavdevice \
-             -lavfilter \
-             -lavformat \
-             -lavutil \
-             -lswscale \
-             -lswresample
-        }else{
-        message("x86")
-        INCLUDEPATH += /home/wangyonglin/github/FFmpegPlayer
-        LIBS +=  -L$$PWD/lib/unix/x86_64 -lFFmpegPlayer
-
-        LIBS +=  -L$$PWD/lib/unix/x86_64 -lavcodec
-        LIBS +=  -L$$PWD/lib/unix/x86_64 -lavdevice
-        LIBS +=  -L$$PWD/lib/unix/x86_64 -lavfilter
-        LIBS +=  -L$$PWD/lib/unix/x86_64 -lavformat
-        LIBS +=  -L$$PWD/lib/unix/x86_64 -lavutil
-        LIBS +=  -L$$PWD/lib/unix/x86_64 -lswscale
-        LIBS +=  -L$$PWD/lib/unix/x86_64 -lswresample
-        LIBS +=  -L$$PWD/lib/unix/x86_64 -lcblas
-
-        }
-        LIBS += -Wall -lpthread
-    }
-}
-
-SOURCES += \
-    main.cpp \
-    ChatWidget.cpp
-
-HEADERS += \
-    ChatWidget.h
-
-TRANSLATIONS += \
-    ChatPlayer_zh_CN.ts
-
-# Default rules for deployment.
-qnx: target.path = /tmp/$${TARGET}/bin
-else: unix:!android: target.path = /opt/$${TARGET}/bin
-!isEmpty(target.path): INSTALLS += target
-
-DISTFILES += \
-    README.md
-   
-```
+linaro@linaro-alip:~/Downloads/ffmpeg-rockchip-master$ ./build_aarch64_linux.sh 
+ERROR: x264 not found using pkg-config
+vim /etc/profile
+export PKG_CONFIG_PATH=/home/linaro/Project/Qt6FFmpeg/libQt6FFmpeg/lib/pkgconfig
+source /etc/profile

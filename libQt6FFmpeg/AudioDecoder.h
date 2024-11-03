@@ -14,7 +14,7 @@ class AudioDecoder : public FFmpegDecoder
 public:
     explicit AudioDecoder(QObject *parent = nullptr);
     ~AudioDecoder();
-    int running( FFmpegDemuxer * demuxer);
+    int execution( FFmpegDemuxer * demuxer);
     void release();
 
 private:

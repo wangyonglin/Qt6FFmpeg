@@ -18,25 +18,30 @@ AudioDecoder::~AudioDecoder()
     this->stop();
 }
 
-int AudioDecoder::running(FFmpegDemuxer *demuxer)
+int AudioDecoder::execution(FFmpegDemuxer *demuxer)
 {
     this->demuxer=demuxer;
-    int ret =0;
-    if((ret=RunningDecoder(this->demuxer->ifmt_ctx, AVMEDIA_TYPE_AUDIO))<0){
-        char errmsg[AV_ERROR_MAX_STRING_SIZE];
-        av_make_error_string(errmsg,AV_ERROR_MAX_STRING_SIZE, ret);
-        qDebug() << "RunningDecoder failed" << errmsg;
-        return ret;
+      int ret =0;
+    if(isRunning()){
+        if((ret=decodeing(this->demuxer->ifmt_ctx, AVMEDIA_TYPE_AUDIO))<0){
+            char errmsg[AV_ERROR_MAX_STRING_SIZE];
+            av_make_error_string(errmsg,AV_ERROR_MAX_STRING_SIZE, ret);
+            qDebug() << "RunningDecoder failed" << errmsg;
+            return ret;
+        }
+
+        ffmpegResample->init(this->dec_ctx,AV_CH_LAYOUT_STEREO,44100,AV_SAMPLE_FMT_S16);
+        // int data_size = av_get_bytes_per_sample(AV_SAMPLE_FMT_S16);
+        QAudioFormat format;
+        format.setSampleRate(44100);
+        format.setChannelCount(2);
+        format.setSampleFormat(QAudioFormat::SampleFormat::Int16);
+        ffmpegSpeaker->init(format);
+        ffmpegSpeaker->create();
+        resume();
     }
 
-    ffmpegResample->init(this->dec_ctx,AV_CH_LAYOUT_STEREO,44100,AV_SAMPLE_FMT_S16);
-    // int data_size = av_get_bytes_per_sample(AV_SAMPLE_FMT_S16);
-    QAudioFormat format;
-    format.setSampleRate(44100);
-    format.setChannelCount(2);
-    format.setSampleFormat(QAudioFormat::SampleFormat::Int16);
-    ffmpegSpeaker->init(format);
-    ffmpegSpeaker->create();
+
 }
 
 void AudioDecoder::release()
@@ -82,10 +87,10 @@ void AudioDecoder::loop()
         }
         if(!this->demuxer->audio_pkt_queue->isEmpty()){
             if(this->audio_frame_queue->size() <3){
-                if((ret= DecodePacket(this->demuxer->audio_pkt_queue,this->audio_frame_queue)) <0 ){
+                if((ret= depacket(this->demuxer->audio_pkt_queue,this->audio_frame_queue)) <0 ){
                     char errmsg[AV_ERROR_MAX_STRING_SIZE];
                     av_make_error_string(errmsg,AV_ERROR_MAX_STRING_SIZE, ret);
-                    qDebug() << "running decoder failed [audio]" << errmsg;
+                   qDebug() << "audio depacket " << errmsg;
                     return ;
                 }
             }else{

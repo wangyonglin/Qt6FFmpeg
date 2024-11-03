@@ -21,11 +21,11 @@ linux-g++* {
     CONFIG(debug, debug|release){
         message(Debug build)
      INCLUDEPATH += $$PWD/../../libQt6FFmpeg/include
-     LIBS += -L$$PWD/../../build/Desktop_Qt_6_7_2-Debug/libQt6FFmpeg -lQt6FFmpeg
-     LIBS += -L$$PWD/../../libQt6FFmpeg/lib  \
-     -lavcodec -lavdevice -lavfilter -lavformat -lavutil -lswresample -lswscale \
-     -lrga -lrockchip_mpp -lssl -lcrypto -lx264 -ldrm
-
+     LIBS += -L$$PWD/../../build/Desktop_Qt_6_7_3-Debug/libQt6FFmpeg -lQt6FFmpeg
+     #LIBS += -L$$PWD/../../libQt6FFmpeg/lib  \
+     LIBS += -lavcodec -lavdevice -lavfilter -lavformat -lavutil -lswresample -lswscale \
+     -lrga -lrockchip_mpp
+     #-lssl -lcrypto -lx264 -ldrm
      LIBS += -pthread -lm -latomic -llzma -lz -Wl,-Bsymbolic -ldl
         release
     }

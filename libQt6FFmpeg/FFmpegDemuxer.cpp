@@ -15,11 +15,12 @@ FFmpegDemuxer::~FFmpegDemuxer()
     this->stop();
 }
 
-int FFmpegDemuxer::running(const QString & url)
+int FFmpegDemuxer::demuxing(const QString & url)
 {
     int ret =-1;
     if(url.isEmpty())return ret;
     if(this->isRunning()){
+
         if(this->ifmt_ctx)avformat_free_context(this->ifmt_ctx);
         this->ifmt_ctx=nullptr;
         if((ret = avformat_open_input(&this->ifmt_ctx, url.toLocal8Bit().data(), NULL, NULL)) < 0) {
@@ -41,6 +42,7 @@ int FFmpegDemuxer::running(const QString & url)
         av_dump_format(this->ifmt_ctx, 0, url.toLocal8Bit().data(), 0);
         this->audio_stream_index=av_find_best_stream(this->ifmt_ctx, AVMEDIA_TYPE_AUDIO, -1, -1, NULL, 0);
         this->video_stream_index=av_find_best_stream(this->ifmt_ctx, AVMEDIA_TYPE_VIDEO, -1, -1, NULL, 0);
+        resume();
         return 0;
     }
     return ret;
@@ -80,10 +82,13 @@ void FFmpegDemuxer::resume()
 {
     this->frameFinished=false;
     FFmpegThreader::resume();
+
 }
 
 void FFmpegDemuxer::loop()
 {
+    // QThread::sleep(3);
+    //qDebug() << tr("state[%0] bool [%1]").arg(state()).arg(frameFinished);
     int ret =-1;
     if(state() ==Running && !frameFinished){
 
@@ -115,12 +120,12 @@ void FFmpegDemuxer::loop()
         if (pkt->stream_index == this->audio_stream_index)
         {
             this->audio_pkt_queue->enqueue(pkt);
-            //qDebug() << "audio_pkt_queue" << this->audio_pkt_queue->size();
+           // qDebug() << "audio_pkt_queue" << this->audio_pkt_queue->size();
         }
         else if(pkt->stream_index == this->video_stream_index)
         {
             this->video_pkt_queue->enqueue(pkt);
-            //qDebug() << "video_pkt_queue" << this->video_pkt_queue->size();
+           // qDebug() << "video_pkt_queue" << this->video_pkt_queue->size();
         }
         av_packet_free(&pkt);
     }

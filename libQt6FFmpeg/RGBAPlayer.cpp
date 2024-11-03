@@ -22,23 +22,23 @@ Qt6FFmpeg::RGBAPlayer::RGBAPlayer(QWidget *parent)
 
 void Qt6FFmpeg::RGBAPlayer::play(const QString &url)
 {
-    demuxer->pause();
-    audio_decoder->pause();
-    video_decoder->pause();
+    // demuxer->pause();
+    // audio_decoder->pause();
+    // video_decoder->pause();
     demuxer->synchronizer->init_synchronize();
-    if(demuxer->running(url)<0){
+    if(demuxer->demuxing(url)<0){
         return;
     }
-    if(audio_decoder->running(demuxer)<0){
+    if(audio_decoder->execution(demuxer)<0){
         return;
     }
     //AV_PIX_FMT_RGBA
-    if(video_decoder->running(demuxer,AV_PIX_FMT_RGBA)<0){
+    if(video_decoder->execution(demuxer,AV_PIX_FMT_RGBA)<0){
         return;
     }
-    audio_decoder->resume();
-    video_decoder->resume();
-    demuxer->resume();
+    // audio_decoder->resume();
+    // video_decoder->resume();
+    // demuxer->resume();
 }
 
 void Qt6FFmpeg::RGBAPlayer::pause()

@@ -5,19 +5,18 @@ FFmpegDecoder::FFmpegDecoder(QObject *parent)
     : FFmpegThreader{parent}
 {}
 
-int FFmpegDecoder::RunningDecoder(AVFormatContext *fmt_ctx, enum AVMediaType type)
+int FFmpegDecoder::decodeing(AVFormatContext *fmt_ctx, enum AVMediaType type)
 {
-    int ret;
-
-
+    int ret=-1;
+    if(!fmt_ctx)return ret;
     ret = av_find_best_stream(fmt_ctx, type, -1, -1, NULL, 0);
     if (ret < 0) {
         fprintf(stderr, "Could not find %s stream in input file '%s'\n",
                 av_get_media_type_string(type));
         return ret;
     } else {
-        this->stream_index = ret;
-        this->st = fmt_ctx->streams[this->stream_index];
+
+        this->st = fmt_ctx->streams[ret];
 
         /* find decoder for the stream */
         this->dec = avcodec_find_decoder(this->st->codecpar->codec_id);
@@ -34,7 +33,6 @@ int FFmpegDecoder::RunningDecoder(AVFormatContext *fmt_ctx, enum AVMediaType typ
                     av_get_media_type_string(type));
             return AVERROR(ENOMEM);
         }
-
         /* Copy codec parameters from input stream to output codec context */
         if ((ret = avcodec_parameters_to_context(this->dec_ctx, this->st->codecpar)) < 0) {
             fprintf(stderr, "Failed to copy %s codec parameters to decoder context\n",
@@ -60,11 +58,10 @@ void FFmpegDecoder::ReleaseDecoder(){
         this->dec_ctx=nullptr;
     }
 }
-int FFmpegDecoder::DecodePacket(FFmpegPacket *pkt_queue, FFmpegFrame *frame_queue)
+int FFmpegDecoder::depacket(FFmpegPacket *pkt_queue, FFmpegFrame *frame_queue)
 {
     int ret = -1;
-    if(!this->dec_ctx)return ret;
-    if(pkt_queue->isEmpty())return ret;
+    if(pkt_queue->isEmpty() && (!this->dec_ctx))return -1;
     AVPacket * pkt= pkt_queue->dequeue();
     if(!pkt)return ret;
     ret = avcodec_send_packet(this->dec_ctx, pkt);

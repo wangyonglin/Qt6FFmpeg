@@ -13,7 +13,7 @@ class VideoDecoder : public FFmpegDecoder
 public:
     explicit VideoDecoder(QObject *parent = nullptr);
     ~VideoDecoder();
-    int running(FFmpegDemuxer * demuxer,QFFmpegPixelFormat pix_fmt=AV_PIX_FMT_YUV420P);
+    int execution(FFmpegDemuxer * demuxer,QFFmpegPixelFormat pix_fmt=AV_PIX_FMT_YUV420P);
     void release();
     VideoSwscaler * videoswscaler=nullptr;
 private:

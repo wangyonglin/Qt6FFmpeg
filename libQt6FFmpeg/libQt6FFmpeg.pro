@@ -25,19 +25,7 @@ linux-g++* {
     CONFIG(debug, debug|release){
         message(Debug build)
         TARGET = Qt6FFmpeg
-        # INCLUDEPATH += -I/usr/local/include
-        # LIBS += -L/usr/local/lib/librockchip_mpp.a
-        # LIBS += -L/usr/local/lib/libavdevice.a
-        # LIBS += -L/usr/local/lib/libavformat.a
-        # LIBS += -L/usr/local/lib/libavutil.a
-        # LIBS += -L/usr/local/lib/libavfilter.a
-        # LIBS += -L/usr/local/lib/libswscale.a
-        # LIBS += -L/usr/local/lib/libswresample.a
-        # LIBS += -L/usr/local/lib/libavcodec.a
-        # LIBS += -L/usr/local/lib/librga.a
-        # LIBS += -pthread -lm -latomic -llzma -lz -Wl,-Bsymbolic
         release
-
     }
 
     CONFIG(release, debug|release){

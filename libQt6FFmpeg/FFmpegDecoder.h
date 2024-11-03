@@ -11,9 +11,9 @@ class FFmpegDecoder : public FFmpegThreader
     Q_OBJECT
 public:
     explicit FFmpegDecoder(QObject *parent = nullptr);
-    int RunningDecoder(AVFormatContext *fmt_ctx, enum AVMediaType type);
+    int decodeing(AVFormatContext *fmt_ctx, enum AVMediaType type);
     void ReleaseDecoder();
-    int DecodePacket(FFmpegPacket *pkts, FFmpegFrame *frames);
+    int depacket(FFmpegPacket *pkts, FFmpegFrame *frames);
 public:
     const AVCodec * dec=nullptr;
     AVCodecContext * dec_ctx=nullptr;
