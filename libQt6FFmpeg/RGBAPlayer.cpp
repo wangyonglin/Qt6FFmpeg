@@ -4,7 +4,7 @@
 #include <QImageReader>
 #include <QResizeEvent>
 
-Qt6FFmpeg::RGBAPlayer::RGBAPlayer(QWidget *parent)
+QtRockchip::Qt6FFmpeg::RGBAPlayer::RGBAPlayer(QWidget *parent)
     :QOpenGLWidget(parent),
     demuxer(new FFmpegDemuxer(this)),
     audio_decoder(new AudioDecoder(this)),
@@ -20,7 +20,7 @@ Qt6FFmpeg::RGBAPlayer::RGBAPlayer(QWidget *parent)
 }
 
 
-void Qt6FFmpeg::RGBAPlayer::play(const QString &url)
+void QtRockchip::Qt6FFmpeg::RGBAPlayer::play(const QString &url)
 {
     // demuxer->pause();
     // audio_decoder->pause();
@@ -41,41 +41,41 @@ void Qt6FFmpeg::RGBAPlayer::play(const QString &url)
     // demuxer->resume();
 }
 
-void Qt6FFmpeg::RGBAPlayer::pause()
+void QtRockchip::Qt6FFmpeg::RGBAPlayer::pause()
 {
     demuxer->pause();
     audio_decoder->pause();
     video_decoder->pause();
 }
 
-void Qt6FFmpeg::RGBAPlayer::resume()
+void QtRockchip::Qt6FFmpeg::RGBAPlayer::resume()
 {
     audio_decoder->resume();
     video_decoder->resume();
     demuxer->resume();
 }
 
-void Qt6FFmpeg::RGBAPlayer::stop()
+void QtRockchip::Qt6FFmpeg::RGBAPlayer::stop()
 {
     audio_decoder->release();
     video_decoder->release();
     demuxer->release();
 }
 
-void Qt6FFmpeg::RGBAPlayer::rejectCallback(int err)
+void QtRockchip::Qt6FFmpeg::RGBAPlayer::rejectCallback(int err)
 {
     emit reject(err);
 }
 
 
 
-Qt6FFmpeg::RGBAPlayer::~RGBAPlayer()
+QtRockchip::Qt6FFmpeg::RGBAPlayer::~RGBAPlayer()
 {    demuxer->release();
     audio_decoder->release();
     video_decoder->release();
 }
 
-void Qt6FFmpeg::RGBAPlayer::initializeGL()
+void QtRockchip::Qt6FFmpeg::RGBAPlayer::initializeGL()
 {
     initializeOpenGLFunctions();
     glClearColor(0.0f, 0.0f, 0.0f,1.0f);  // 设置背景色
@@ -103,13 +103,13 @@ void Qt6FFmpeg::RGBAPlayer::initializeGL()
     finished=true;
 }
 
-void Qt6FFmpeg::RGBAPlayer::resizeGL(int w, int h)
+void QtRockchip::Qt6FFmpeg::RGBAPlayer::resizeGL(int w, int h)
 {
     if(h<=0) h=1;
     glViewport(0,0,w,h);
 }
 
-void Qt6FFmpeg::RGBAPlayer::paintGL()
+void QtRockchip::Qt6FFmpeg::RGBAPlayer::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     if (!currentFrame.isNull()) {
@@ -131,7 +131,7 @@ void Qt6FFmpeg::RGBAPlayer::paintGL()
     }
 }
 
-void Qt6FFmpeg::RGBAPlayer::refresh()
+void QtRockchip::Qt6FFmpeg::RGBAPlayer::refresh()
 {
     if(finished){
         QImage glImage(dstImageData,dstImageWidth,dstImageHeight,QImage::Format_RGBA8888);

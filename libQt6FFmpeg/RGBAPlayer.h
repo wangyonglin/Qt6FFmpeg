@@ -16,7 +16,7 @@
 #include "FFmpegParameters.h"
 #include "libQt6FFmpeg_global.h"
 
-namespace Qt6FFmpeg {
+namespace QtRockchip::Qt6FFmpeg {
 class LIBQT6FFMPEG_EXPORT RGBAPlayer : public QOpenGLWidget,public QOpenGLFunctions
 {
     Q_OBJECT

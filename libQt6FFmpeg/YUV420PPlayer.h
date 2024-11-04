@@ -15,7 +15,7 @@
 #include "FFmpegParameters.h"
 #include "libQt6FFmpeg_global.h"
 
-namespace Qt6FFmpeg {
+namespace QtRockchip::Qt6FFmpeg {
 class LIBQT6FFMPEG_EXPORT YUV420PPlayer : public QOpenGLWidget,public QOpenGLFunctions
 {
     Q_OBJECT
