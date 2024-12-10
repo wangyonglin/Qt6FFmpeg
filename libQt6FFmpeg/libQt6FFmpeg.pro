@@ -37,9 +37,14 @@ linux-g++* {
 }
 SOURCES += \
     AudioDecoder.cpp \
+    CameraCapturer.cpp \
+    CameraDecoder.cpp \
+    CameraDemuxer.cpp \
+    CameraPlayer.cpp \
     FFmpegDecoder.cpp \
     FFmpegDemuxer.cpp \
     FFmpegFrame.cpp \
+    FFmpegLogger.cpp \
     FFmpegPacket.cpp \
     FFmpegParameters.cpp \
     FFmpegResampler.cpp \
@@ -53,9 +58,14 @@ SOURCES += \
 
 HEADERS += \
     AudioDecoder.h \
+    CameraCapturer.h \
+    CameraDecoder.h \
+    CameraDemuxer.h \
+    CameraPlayer.h \
     FFmpegDecoder.h \
     FFmpegDemuxer.h \
     FFmpegFrame.h \
+    FFmpegLogger.h \
     FFmpegPacket.h \
     FFmpegParameters.h \
     FFmpegResampler.h \
