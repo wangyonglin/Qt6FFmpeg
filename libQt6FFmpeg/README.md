@@ -1,7 +1,29 @@
  #   FFmpegPlayer 视频播放器模块 
 
 # Native compilation on ARM/ARM64 host
-
+Qt Creator 14.0.2
+Based on Qt 6.7.3 (GCC 10.2.1 20210110, arm64)
+linaro@linaro-alip:/opt/bin$ ./ffmpeg -v
+ffmpeg version 6.1 Copyright (c) 2000-2023 the FFmpeg developers
+  built with gcc 10 (Debian 10.2.1-6)
+  configuration: --prefix=/opt --enable-libv4l2 --enable-ffplay --enable-avdevice --enable-gpl --enable-version3 --enable-libdrm --enable-rkmpp --enable-rkrga --enable-openssl --enable-nonfree --enable-pthreads --enable-fontconfig --enable-libvpx --enable-shared --enable-debug=3 --enable-libmp3lame --enable-static --enable-postproc --enable-libxvid --disable-x86asm --enable-libass --enable-libfdk-aac --arch=arm64 --disable-libopenh264 --enable-vaapi --enable-vdpau --enable-decoder=h264_v4l2m2m --enable-decoder=vp8_v4l2m2m --enable-decoder=mpeg2_v4l2m2m --enable-decoder=mpeg4_v4l2m2m
+  WARNING: library configuration mismatch
+  avutil      configuration: --enable-libv4l2 --enable-ffplay --enable-avdevice --enable-gpl --enable-version3 --enable-libdrm --enable-rkmpp --enable-rkrga --enable-openssl --enable-nonfree --enable-pthreads --enable-fontconfig --enable-libvpx --enable-shared --enable-debug=3 --enable-libmp3lame --enable-static --enable-postproc --enable-libxvid --disable-x86asm --enable-libass --enable-libfdk-aac --arch=arm64 --disable-libopenh264 --enable-vaapi --enable-vdpau --enable-decoder=h264_v4l2m2m --enable-decoder=vp8_v4l2m2m --enable-decoder=mpeg2_v4l2m2m --enable-decoder=mpeg4_v4l2m2m
+  avcodec     configuration: --enable-libv4l2 --enable-ffplay --enable-avdevice --enable-gpl --enable-version3 --enable-libdrm --enable-rkmpp --enable-rkrga --enable-openssl --enable-nonfree --enable-pthreads --enable-fontconfig --enable-libvpx --enable-shared --enable-debug=3 --enable-libmp3lame --enable-static --enable-postproc --enable-libxvid --disable-x86asm --enable-libass --enable-libfdk-aac --arch=arm64 --disable-libopenh264 --enable-vaapi --enable-vdpau --enable-decoder=h264_v4l2m2m --enable-decoder=vp8_v4l2m2m --enable-decoder=mpeg2_v4l2m2m --enable-decoder=mpeg4_v4l2m2m
+  avformat    configuration: --enable-libv4l2 --enable-ffplay --enable-avdevice --enable-gpl --enable-version3 --enable-libdrm --enable-rkmpp --enable-rkrga --enable-openssl --enable-nonfree --enable-pthreads --enable-fontconfig --enable-libvpx --enable-shared --enable-debug=3 --enable-libmp3lame --enable-static --enable-postproc --enable-libxvid --disable-x86asm --enable-libass --enable-libfdk-aac --arch=arm64 --disable-libopenh264 --enable-vaapi --enable-vdpau --enable-decoder=h264_v4l2m2m --enable-decoder=vp8_v4l2m2m --enable-decoder=mpeg2_v4l2m2m --enable-decoder=mpeg4_v4l2m2m
+  avdevice    configuration: --enable-libv4l2 --enable-ffplay --enable-avdevice --enable-gpl --enable-version3 --enable-libdrm --enable-rkmpp --enable-rkrga --enable-openssl --enable-nonfree --enable-pthreads --enable-fontconfig --enable-libvpx --enable-shared --enable-debug=3 --enable-libmp3lame --enable-static --enable-postproc --enable-libxvid --disable-x86asm --enable-libass --enable-libfdk-aac --arch=arm64 --disable-libopenh264 --enable-vaapi --enable-vdpau --enable-decoder=h264_v4l2m2m --enable-decoder=vp8_v4l2m2m --enable-decoder=mpeg2_v4l2m2m --enable-decoder=mpeg4_v4l2m2m
+  avfilter    configuration: --enable-libv4l2 --enable-ffplay --enable-avdevice --enable-gpl --enable-version3 --enable-libdrm --enable-rkmpp --enable-rkrga --enable-openssl --enable-nonfree --enable-pthreads --enable-fontconfig --enable-libvpx --enable-shared --enable-debug=3 --enable-libmp3lame --enable-static --enable-postproc --enable-libxvid --disable-x86asm --enable-libass --enable-libfdk-aac --arch=arm64 --disable-libopenh264 --enable-vaapi --enable-vdpau --enable-decoder=h264_v4l2m2m --enable-decoder=vp8_v4l2m2m --enable-decoder=mpeg2_v4l2m2m --enable-decoder=mpeg4_v4l2m2m
+  swscale     configuration: --enable-libv4l2 --enable-ffplay --enable-avdevice --enable-gpl --enable-version3 --enable-libdrm --enable-rkmpp --enable-rkrga --enable-openssl --enable-nonfree --enable-pthreads --enable-fontconfig --enable-libvpx --enable-shared --enable-debug=3 --enable-libmp3lame --enable-static --enable-postproc --enable-libxvid --disable-x86asm --enable-libass --enable-libfdk-aac --arch=arm64 --disable-libopenh264 --enable-vaapi --enable-vdpau --enable-decoder=h264_v4l2m2m --enable-decoder=vp8_v4l2m2m --enable-decoder=mpeg2_v4l2m2m --enable-decoder=mpeg4_v4l2m2m
+  swresample  configuration: --enable-libv4l2 --enable-ffplay --enable-avdevice --enable-gpl --enable-version3 --enable-libdrm --enable-rkmpp --enable-rkrga --enable-openssl --enable-nonfree --enable-pthreads --enable-fontconfig --enable-libvpx --enable-shared --enable-debug=3 --enable-libmp3lame --enable-static --enable-postproc --enable-libxvid --disable-x86asm --enable-libass --enable-libfdk-aac --arch=arm64 --disable-libopenh264 --enable-vaapi --enable-vdpau --enable-decoder=h264_v4l2m2m --enable-decoder=vp8_v4l2m2m --enable-decoder=mpeg2_v4l2m2m --enable-decoder=mpeg4_v4l2m2m
+  postproc    configuration: --enable-libv4l2 --enable-ffplay --enable-avdevice --enable-gpl --enable-version3 --enable-libdrm --enable-rkmpp --enable-rkrga --enable-openssl --enable-nonfree --enable-pthreads --enable-fontconfig --enable-libvpx --enable-shared --enable-debug=3 --enable-libmp3lame --enable-static --enable-postproc --enable-libxvid --disable-x86asm --enable-libass --enable-libfdk-aac --arch=arm64 --disable-libopenh264 --enable-vaapi --enable-vdpau --enable-decoder=h264_v4l2m2m --enable-decoder=vp8_v4l2m2m --enable-decoder=mpeg2_v4l2m2m --enable-decoder=mpeg4_v4l2m2m
+  libavutil      58. 29.100 / 58. 29.100
+  libavcodec     60. 31.102 / 60. 31.102
+  libavformat    60. 16.100 / 60. 16.100
+  libavdevice    60.  3.100 / 60.  3.100
+  libavfilter     9. 12.100 /  9. 12.100
+  libswscale      7.  5.100 /  7.  5.100
+  libswresample   4. 12.100 /  4. 12.100
+  libpostproc    57.  3.100 / 57.  3.100
 # Build MPP
 mkdir -p ~/dev && cd ~/dev
 git clone -b jellyfin-mpp --depth=1 https://github.com/nyanmisaka/mpp.git rkmpp
