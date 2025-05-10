@@ -1,14 +1,14 @@
-#include "Qt6FFmpegDemuxer.h"
+#include "Qt6CameraDemuxer.h"
 #include <QDebug>
 
 
-Qt6FFmpegDemuxer::Qt6FFmpegDemuxer(QObject *parent)
+Qt6CameraDemuxer::Qt6CameraDemuxer(QObject *parent)
     :QObject{parent}
 {
-
+    initFFmpegAll();
 }
 
-bool Qt6FFmpegDemuxer::initialize()
+bool Qt6CameraDemuxer::initFFmpegAll()
 {
     avdevice_register_all();
     avformat_network_init();
@@ -27,13 +27,13 @@ bool Qt6FFmpegDemuxer::initialize()
     return true;
 }
 
-void Qt6FFmpegDemuxer::release()
+void Qt6CameraDemuxer::release()
 {
      avformat_free_context(ifmt_ctx);
 }
 
 
-int Qt6FFmpegDemuxer::open(const QString &url)
+int Qt6CameraDemuxer::open(const QString &url)
 {
     int ret =-1;
     av_dict_set(&dict, "video_size", QString("%1x%2").arg(width).arg(height).toUtf8().constData(),0);
@@ -83,7 +83,7 @@ int Qt6FFmpegDemuxer::open(const QString &url)
 
 
 
-int Qt6FFmpegDemuxer::read(AVPacket * pkt)
+int Qt6CameraDemuxer::read(AVPacket * pkt)
 {
     if(ifmt_ctx){
         return av_read_frame(ifmt_ctx,pkt);

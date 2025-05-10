@@ -1,9 +1,9 @@
-#include "Qt6FFmpegYUV420P.h"
+#include "Qt6YUV420PRenderer.h"
 #include <QDebug>
 
 
 
-Qt6FFmpegYUV420P::Qt6FFmpegYUV420P(QWidget *parent)
+Qt6YUV420PRenderer::Qt6YUV420PRenderer(QWidget *parent)
     :QOpenGLWidget(parent)
 {
 
@@ -11,7 +11,7 @@ Qt6FFmpegYUV420P::Qt6FFmpegYUV420P(QWidget *parent)
 
 
 
-void Qt6FFmpegYUV420P::slotUpdate(uint8_t *yuvdata, int yuvwidth, int yuvheight)
+void Qt6YUV420PRenderer::slotUpdate(uint8_t *yuvdata, int yuvwidth, int yuvheight)
 {
     ptr = yuvdata;
     width = yuvwidth;
@@ -24,7 +24,7 @@ void Qt6FFmpegYUV420P::slotUpdate(uint8_t *yuvdata, int yuvwidth, int yuvheight)
 
 
 
-void Qt6FFmpegYUV420P::initializeGL()
+void Qt6YUV420PRenderer::initializeGL()
 {
     initializeOpenGLFunctions();
     const char *vsrc =
@@ -82,14 +82,14 @@ void Qt6FFmpegYUV420P::initializeGL()
     idV = ids[2];
 }
 
-void Qt6FFmpegYUV420P::resizeGL(int w, int h)
+void Qt6YUV420PRenderer::resizeGL(int w, int h)
 {
     if(h<=0) h=1;
 
     glViewport(0,0,w,h);
 }
 
-void Qt6FFmpegYUV420P::paintGL()
+void Qt6YUV420PRenderer::paintGL()
 {
     if(!ptr) return;
 

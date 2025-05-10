@@ -1,19 +1,17 @@
-#ifndef QT6FFMPEGDEMUXER_H
-#define QT6FFMPEGDEMUXER_H
+#ifndef QT6CAMERADEMUXER_H
+#define QT6CAMERADEMUXER_H
 #include <QObject>
 #include <QString>
 #include <QDebug>
-#include <Qt6FFmpegCore.h>
-#include "Qt6FFmpeg_global.h"
+#include "Qt6Core.h"
 
 
-
-class QT6FFMPEG_EXPORT Qt6FFmpegDemuxer : public QObject
+class QT6FFMPEG_EXPORT Qt6CameraDemuxer : public QObject
 {
     Q_OBJECT
 public:
-    explicit Qt6FFmpegDemuxer(QObject *parent = nullptr);
-    bool initialize();
+    explicit Qt6CameraDemuxer(QObject *parent = nullptr);
+    bool initFFmpegAll();
     void release();
     int open(const QString & url);
     int read(AVPacket * pkt);
@@ -31,4 +29,4 @@ public:
     AVStream * video_stream=NULL;
 };
 
-#endif // QT6FFMPEGDEMUXER_H
+#endif // QT6CAMERADEMUXER_H

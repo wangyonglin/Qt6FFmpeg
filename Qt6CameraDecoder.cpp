@@ -1,30 +1,30 @@
-#include "Qt6FFmpegDecoder.h"
+#include "Qt6CameraDecoder.h"
 #include <QDebug>
-Qt6FFmpegDecoder::Qt6FFmpegDecoder(QObject *parent)
+Qt6CameraDecoder::Qt6CameraDecoder(QObject *parent)
     : QObject{parent}
 {
 }
 
 
-bool Qt6FFmpegDecoder::initialize()
-{
-    frame = av_frame_alloc();
-    if(frame){
+// bool Qt6FFmpegDecoder::initialize()
+// {
+//     frame = av_frame_alloc();
+//     if(frame){
 
-        return true;
-    }
-    return false;
-}
+//         return true;
+//     }
+//     return false;
+// }
 
-void Qt6FFmpegDecoder::release()
-{
-    if(frame){
-       av_frame_free(&frame);
-    }
-}
+// void Qt6FFmpegDecoder::release()
+// {
+//     if(frame){
+//        av_frame_free(&frame);
+//     }
+// }
 
 
-int Qt6FFmpegDecoder::open(AVFormatContext *fmt_ctx, enum AVMediaType type)
+int Qt6CameraDecoder::open(AVFormatContext *fmt_ctx, enum AVMediaType type)
 {
     int ret=-1;
     if(!fmt_ctx)return ret;
@@ -73,7 +73,7 @@ int Qt6FFmpegDecoder::open(AVFormatContext *fmt_ctx, enum AVMediaType type)
 
 
 
-AVFrame* Qt6FFmpegDecoder::read(AVPacket * pkt){
+AVFrame* Qt6CameraDecoder::read(AVPacket * pkt){
 
     if(!pkt)return NULL;
     if(codec_ctx){

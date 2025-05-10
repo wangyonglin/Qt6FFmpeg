@@ -2,21 +2,21 @@
 #define QT6CAMERAHANDLER_H
 #include <QString>
 #include <QObject>
-#include <Qt6FFmpegDemuxer.h>
-#include <Qt6FFmpegYUV420P.h>
-#include <Qt6FFmpegDecoder.h>
-#include <Qt6FFmpegThread.h>
-#include <Qt6FFmpegSwscaler.h>
-#include <Qt6FFmpegCore.h>
+#include "Qt6CameraDemuxer.h"
+#include "Qt6YUV420PRenderer.h"
+#include "Qt6CameraDecoder.h"
+#include "Qt6Thread.h"
+#include "Qt6Swscaler.h"
+#include "Qt6Core.h"
 
-class Qt6CameraHandler : public Qt6FFmpegThread
+class Qt6CameraHandler : public Qt6Thread
 {
     Q_OBJECT
 public:
     explicit Qt6CameraHandler(QObject *parent = nullptr);
-    Qt6FFmpegDemuxer *camera_demuxer;
-    Qt6FFmpegDecoder *video_decoder;
-    Qt6FFmpegSwscaler *videoswscaler;
+    Qt6CameraDemuxer *camera_demuxer;
+    Qt6CameraDecoder *video_decoder;
+    Qt6Swscaler *videoswscaler;
     void openUrl(const QString &url);
 signals:
     void signalUpdate(QByteArray yuvdata, int yuvwidth, int yuvheight);

@@ -11,35 +11,71 @@ CONFIG += c++17
 
 
 
+
 # Default rules for deployment.
 unix {
     target.path = /usr/lib
 }
 !isEmpty(target.path): INSTALLS += target
 
+# Default rules for deployment.
+# qnx: target.path = /tmp/$${TARGET}/bin
+# else: unix:!android: target.path = /opt/$${TARGET}/bin
+# !isEmpty(target.path): INSTALLS += target
 
-HEADERS += \
-    Qt6CameraHandler.h \
-    Qt6CameraPlayer.h \
-    Qt6FFmpegCore.h \
-    Qt6FFmpegDecoder.h \
-    Qt6FFmpegDemuxer.h \
-    Qt6FFmpegSwscaler.h \
-    Qt6FFmpegThread.h \
-    Qt6FFmpegYUV420P.h \
-    Qt6FFmpeg_global.h
-
-SOURCES += \
-    Qt6CameraHandler.cpp \
-    Qt6CameraPlayer.cpp \
-    Qt6FFmpegCore.cpp \
-    Qt6FFmpegDecoder.cpp \
-    Qt6FFmpegDemuxer.cpp \
-    Qt6FFmpegSwscaler.cpp \
-    Qt6FFmpegThread.cpp \
-    Qt6FFmpegYUV420P.cpp
+RESOURCES += \
+    resources.qrc
 
 DISTFILES += \
-    include/Qt6FFmpegDemuxer \
-    include/Qt6FFmpegThread \
-    include/Qt6FFmpegYUV420P
+    LICENSE \
+    Qt6FFmpeg.pro.user \
+    README.md \
+    fragment.frag \
+    vertex.vert
+
+HEADERS += \
+    Qt6Camera.h \
+    Qt6CameraDecoder.h \
+    Qt6CameraDemuxer.h \
+    Qt6CameraHandler.h \
+    Qt6Core.h \
+    Qt6Decoder.h \
+    Qt6DecoderAudio.h \
+    Qt6DecoderVideo.h \
+    Qt6Demuxer.h \
+    Qt6FFmpeg_global.h \
+    Qt6Frame.h \
+    Qt6Packet.h \
+    Qt6Player.h \
+    Qt6RGBARenderer.h \
+    Qt6Resampler.h \
+    Qt6Speaker.h \
+    Qt6Swscaler.h \
+    Qt6Synchronizer.h \
+    Qt6Thread.h \
+    Qt6YUV420PRenderer.h \
+    include/Qt6Camera
+
+SOURCES += \
+    Qt6Camera.cpp \
+    Qt6CameraDecoder.cpp \
+    Qt6CameraDemuxer.cpp \
+    Qt6CameraHandler.cpp \
+    Qt6Core.cpp \
+    Qt6Decoder.cpp \
+    Qt6DecoderAudio.cpp \
+    Qt6DecoderVideo.cpp \
+    Qt6Demuxer.cpp \
+    Qt6Frame.cpp \
+    Qt6Packet.cpp \
+    Qt6Player.cpp \
+    Qt6RGBARenderer.cpp \
+    Qt6Resampler.cpp \
+    Qt6Speaker.cpp \
+    Qt6Swscaler.cpp \
+    Qt6Synchronizer.cpp \
+    Qt6Thread.cpp \
+    Qt6YUV420PRenderer.cpp
+
+
+

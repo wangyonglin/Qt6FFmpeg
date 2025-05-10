@@ -1,6 +1,9 @@
-#ifndef QT6FFMPEGDECODER_H
-#define QT6FFMPEGDECODER_H
+#ifndef QT6CORE_H
+#define QT6CORE_H
+
+
 extern "C" {
+#include <libavcodec/avcodec.h>
 #include "libavutil/avstring.h"
 #include "libavutil/channel_layout.h"
 #include "libavutil/eval.h"
@@ -19,33 +22,17 @@ extern "C" {
 #include "libavutil/opt.h"
 #include "libavutil/tx.h"
 #include "libswresample/swresample.h"
-#include <libavcodec/avcodec.h>
+
 #include "libavfilter/avfilter.h"
 #include "libavfilter/buffersink.h"
 #include "libavfilter/buffersrc.h"
 }
 
+#include <QMetaType>
+#include <QCoreApplication>
+#include <QDebug>
+#include <QLoggingCategory>
 #include <QObject>
+#include <QVariant>
 #include "Qt6FFmpeg_global.h"
-
-
-class QT6FFMPEG_EXPORT Qt6FFmpegDecoder : public QObject
-{
-    Q_OBJECT
-public:
-    explicit Qt6FFmpegDecoder(QObject *parent = nullptr);
-    bool initialize();
-    void release();
-    int open(AVFormatContext *fmt_ctx, AVMediaType type);
-    AVFrame* read(AVPacket * pkt);
-public:
-    AVCodecContext * codec_ctx=nullptr;
-    const AVCodec * codec=nullptr;
-    AVStream *stream=nullptr;
-    AVFrame* frame =nullptr;
-signals:
-};
-
-
-
-#endif // QT6FFMPEGDECODER_H
+#endif // QT6CORE_H

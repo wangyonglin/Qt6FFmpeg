@@ -1,12 +1,12 @@
-#include "Qt6FFmpegThread.h"
+#include "Qt6Thread.h"
 
-Qt6FFmpegThread::Qt6FFmpegThread(QObject *parent)
+Qt6Thread::Qt6Thread(QObject *parent)
     : QThread(parent),
     pauseFlag(false),
     stopFlag(false)
 {}
 
-Qt6FFmpegThread::State Qt6FFmpegThread::state() const
+Qt6Thread::State Qt6Thread::state() const
 {
     State s = Stoped;
     if (!QThread::isRunning())
@@ -24,14 +24,14 @@ Qt6FFmpegThread::State Qt6FFmpegThread::state() const
     return s;
 }
 
-void Qt6FFmpegThread::start(QThread::Priority pri)
+void Qt6Thread::start(QThread::Priority pri)
 {
     QThread::start(pri);
 }
 
 
 
-void Qt6FFmpegThread::stop()
+void Qt6Thread::stop()
 {
     if (QThread::isRunning())
     {
@@ -42,7 +42,7 @@ void Qt6FFmpegThread::stop()
     }
 }
 
-void Qt6FFmpegThread::pause()
+void Qt6Thread::pause()
 {
     if (QThread::isRunning())
     {
@@ -50,7 +50,7 @@ void Qt6FFmpegThread::pause()
     }
 }
 
-void Qt6FFmpegThread::resume()
+void Qt6Thread::resume()
 {
     if (QThread::isRunning())
     {
@@ -59,7 +59,7 @@ void Qt6FFmpegThread::resume()
     }
 }
 
-void Qt6FFmpegThread::run()
+void Qt6Thread::run()
 {
     //qDebug() << "enter thread : " << QThread::currentThreadId();
     while (!stopFlag)

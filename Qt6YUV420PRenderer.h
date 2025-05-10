@@ -1,5 +1,5 @@
-#ifndef QT6FFMPEGYUV420P_H
-#define QT6FFMPEGYUV420P_H
+#ifndef QT6YUV420PRENDERER_H
+#define QT6YUV420PRENDERER_H
 #include <QWidget>
 #include <QObject>
 #include <QOpenGLFunctions>
@@ -12,11 +12,11 @@
 #include "Qt6FFmpeg_global.h"
 
 
-class QT6FFMPEG_EXPORT Qt6FFmpegYUV420P: public QOpenGLWidget,public QOpenGLFunctions
+class QT6FFMPEG_EXPORT Qt6YUV420PRenderer: public QOpenGLWidget,public QOpenGLFunctions
 {
     Q_OBJECT
 public:
-    explicit Qt6FFmpegYUV420P(QWidget *parent = nullptr);
+    explicit Qt6YUV420PRenderer(QWidget *parent = nullptr);
 private:
     QOpenGLShaderProgram m_program;
     QOpenGLBuffer vbo;
@@ -34,4 +34,4 @@ protected:
 };
 
 
-#endif // QT6FFMPEGYUV420P_H
+#endif // QT6YUV420PRENDERER_H

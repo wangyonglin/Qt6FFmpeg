@@ -1,5 +1,5 @@
-#ifndef QT6FFMPEGTHREAD_H
-#define QT6FFMPEGTHREAD_H
+#ifndef QT6THREAD_H
+#define QT6THREAD_H
 
 #include <QThread>
 #include <QObject>
@@ -8,11 +8,11 @@
 #include <QWaitCondition>
 #include "Qt6FFmpeg_global.h"
 
-class QT6FFMPEG_EXPORT Qt6FFmpegThread: public QThread
+class QT6FFMPEG_EXPORT Qt6Thread: public QThread
 {
     Q_OBJECT
 public:
-    explicit Qt6FFmpegThread(QObject *parent = nullptr);
+    explicit Qt6Thread(QObject *parent = nullptr);
     enum State
     {
 
@@ -36,4 +36,4 @@ public:
     QWaitCondition condition;
 };
 
-#endif // QT6FFMPEGTHREAD_H
+#endif // QT6THREAD_H

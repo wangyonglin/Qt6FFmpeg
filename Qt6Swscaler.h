@@ -1,19 +1,18 @@
-#ifndef QT6FFMPEGSWSCALER_H
-#define QT6FFMPEGSWSCALER_H
+#ifndef QT6SWSCALER_H
+#define QT6SWSCALER_H
 
 #include <QObject>
 #include <QImage>
-#include <Qt6FFmpegCore.h>
-#include "Qt6FFmpeg_global.h"
+#include "Qt6Core.h"
 
 typedef enum AVPixelFormat QFFmpegPixelFormat;
 
-class QT6FFMPEG_EXPORT Qt6FFmpegSwscaler : public QObject
+class QT6FFMPEG_EXPORT Qt6Swscaler : public QObject
 {
     Q_OBJECT
 public:
-    explicit Qt6FFmpegSwscaler(QObject *parent = nullptr);
-    ~Qt6FFmpegSwscaler();
+    explicit Qt6Swscaler(QObject *parent = nullptr);
+    ~Qt6Swscaler();
     int scale2qyuv420p(AVCodecContext *ctx,AVFrame *frame);
     uint8_t * data();
     int width();
@@ -30,4 +29,4 @@ signals:
 
 };
 
-#endif // QT6FFMPEGSWSCALER_H
+#endif // QT6SWSCALER_H

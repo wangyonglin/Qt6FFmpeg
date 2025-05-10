@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>fragment.frag</file>
+        <file>vertex.vert</file>
+    </qresource>
+</RCC>

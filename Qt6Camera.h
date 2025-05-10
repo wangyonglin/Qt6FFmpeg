@@ -1,21 +1,21 @@
-#ifndef QT6CAMERAPLAYER_H
-#define QT6CAMERAPLAYER_H
+#ifndef QT6CAMERA_H
+#define QT6CAMERA_H
 
 #include <QWidget>
-#include <Qt6FFmpegDemuxer.h>
-#include <Qt6FFmpegYUV420P.h>
-#include <Qt6FFmpegDecoder.h>
-#include <Qt6FFmpegThread.h>
-#include <Qt6CameraHandler.h>
-class Qt6CameraPlayer : public Qt6FFmpegYUV420P
+#include "Qt6CameraDemuxer.h"
+#include "Qt6YUV420PRenderer.h"
+#include "Qt6CameraDecoder.h"
+#include "Qt6Thread.h"
+#include "Qt6CameraHandler.h"
+class Qt6Camera : public Qt6YUV420PRenderer
 {
     Q_OBJECT
 public:
-    explicit Qt6CameraPlayer(QWidget *parent = nullptr);
-    ~Qt6CameraPlayer();
+    explicit Qt6Camera(QWidget *parent = nullptr);
+    ~Qt6Camera();
     Qt6CameraHandler *handle;
 public:
     void OpenCamera(const QString &url);
 };
 
-#endif // QT6CAMERAPLAYER_H
+#endif // QT6CAMERA_H

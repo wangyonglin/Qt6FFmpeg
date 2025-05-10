@@ -1,19 +1,19 @@
-#include "Qt6FFmpegSwscaler.h"
+#include "Qt6Swscaler.h"
 #include <QDebug>
 
-Qt6FFmpegSwscaler::Qt6FFmpegSwscaler(QObject *parent)
+Qt6Swscaler::Qt6Swscaler(QObject *parent)
     : QObject{parent}
 {
 
 }
 
-Qt6FFmpegSwscaler::~Qt6FFmpegSwscaler()
+Qt6Swscaler::~Qt6Swscaler()
 {
     av_freep(&imageframe[0]);
 }
 
 
-int Qt6FFmpegSwscaler::Qt6FFmpegSwscaler::scale2qyuv420p(AVCodecContext *ctx, AVFrame *frame)
+int Qt6Swscaler::Qt6Swscaler::scale2qyuv420p(AVCodecContext *ctx, AVFrame *frame)
 {
 
     int ret=-1;
@@ -66,17 +66,17 @@ int Qt6FFmpegSwscaler::Qt6FFmpegSwscaler::scale2qyuv420p(AVCodecContext *ctx, AV
     return 0;
 }
 
-uint8_t *Qt6FFmpegSwscaler::data()
+uint8_t *Qt6Swscaler::data()
 {
     return *imageframe;
 }
 
-int Qt6FFmpegSwscaler::width()
+int Qt6Swscaler::width()
 {
     return imagewidth;
 }
 
-int Qt6FFmpegSwscaler::height()
+int Qt6Swscaler::height()
 {
     return imageheight;
 }
