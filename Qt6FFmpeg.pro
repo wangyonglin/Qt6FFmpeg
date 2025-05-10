@@ -53,8 +53,11 @@ HEADERS += \
     Qt6Swscaler.h \
     Qt6Synchronizer.h \
     Qt6Thread.h \
+    Qt6TransparentPlayer.h \
     Qt6YUV420PRenderer.h \
-    include/Qt6Camera
+    include/Qt6Camera \
+    include/Qt6Player \
+    include/Qt6TransparentPlayer
 
 SOURCES += \
     Qt6Camera.cpp \
@@ -75,6 +78,7 @@ SOURCES += \
     Qt6Swscaler.cpp \
     Qt6Synchronizer.cpp \
     Qt6Thread.cpp \
+    Qt6TransparentPlayer.cpp \
     Qt6YUV420PRenderer.cpp
 
 

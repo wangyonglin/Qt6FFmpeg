@@ -14,9 +14,11 @@ public:
     explicit Qt6Swscaler(QObject *parent = nullptr);
     ~Qt6Swscaler();
     int scale2qyuv420p(AVCodecContext *ctx,AVFrame *frame);
+    int scale2rgba(AVCodecContext *ctx, AVFrame *frame);
     uint8_t * data();
     int width();
     int height();
+
 private:
     uint8_t *imageframe[4];
     int linesizes[4];

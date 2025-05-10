@@ -25,7 +25,7 @@ private:
     uint8_t *ptr;
     QByteArray imgdata;
 public slots:
-    void slotUpdate(uint8_t * yuvdata,int yuvwidth,int yuvheight);
+    void refresh(uint8_t * dstImageData,int dstImageWidth,int dstImageHeight);
     // QOpenGLWidget interface
 protected:
     virtual void initializeGL() override;

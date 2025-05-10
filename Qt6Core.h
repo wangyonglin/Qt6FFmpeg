@@ -35,4 +35,11 @@ extern "C" {
 #include <QObject>
 #include <QVariant>
 #include "Qt6FFmpeg_global.h"
+
+
+typedef  enum {
+    QT6_VIDEO_YUV420P,
+    QT6_VIDEO_RGBA
+}Qt6PixelFormat;
+
 #endif // QT6CORE_H

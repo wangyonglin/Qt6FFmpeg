@@ -1,7 +1,10 @@
-#include "Qt6Player.h"
+#include "Qt6TransparentPlayer.h"
 
-Qt6Player::Qt6Player(QWidget *parent)
-    : Qt6YUV420PRenderer{parent}
+
+
+
+Qt6TransparentPlayer::Qt6TransparentPlayer(QWidget *parent)
+    : Qt6RGBARenderer{parent}
 {
     vpkt=new Qt6Packet(this);
     apkt= new Qt6Packet(this);
@@ -9,12 +12,12 @@ Qt6Player::Qt6Player(QWidget *parent)
     sync= new Qt6Synchronizer(this);
     vframe= new Qt6Frame(this);
     aframe = new Qt6Frame(this);
-    decode_video= new Qt6DecoderVideo(this);
+    decode_video= new Qt6DecoderVideo(this,QT6_VIDEO_RGBA);
     decode_audio= new Qt6DecoderAudio(this);
-    connect(decode_video,&Qt6DecoderVideo::refresh,this,&Qt6Player::refresh,Qt::DirectConnection);
+    connect(decode_video,&Qt6DecoderVideo::refresh,this,&Qt6RGBARenderer::refresh,Qt::DirectConnection);
 }
 
-Qt6Player::~Qt6Player()
+Qt6TransparentPlayer::~Qt6TransparentPlayer()
 {
     decode_video->stop();
     decode_audio->stop();
@@ -26,7 +29,7 @@ Qt6Player::~Qt6Player()
     apkt->release();
 }
 
-void Qt6Player::play(const QString &url)
+void Qt6TransparentPlayer::play(const QString &url)
 {
     Q_UNUSED(url);
     demux->start(url,sync,vpkt,apkt);

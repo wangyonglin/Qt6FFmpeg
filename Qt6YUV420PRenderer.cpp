@@ -11,11 +11,11 @@ Qt6YUV420PRenderer::Qt6YUV420PRenderer(QWidget *parent)
 
 
 
-void Qt6YUV420PRenderer::slotUpdate(uint8_t *yuvdata, int yuvwidth, int yuvheight)
+void Qt6YUV420PRenderer::refresh(uint8_t * dstImageData,int dstImageWidth,int dstImageHeight)
 {
-    ptr = yuvdata;
-    width = yuvwidth;
-    height = yuvheight;
+    ptr = dstImageData;
+    width = dstImageWidth;
+    height = dstImageHeight;
     if(ptr){
         update();
     }

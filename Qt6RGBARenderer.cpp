@@ -20,7 +20,6 @@ void Qt6RGBARenderer::initializeGL()
 {
     initializeOpenGLFunctions();
     glClearColor(0.0f, 0.0f, 0.0f,1.0f);  // 设置背景色
-
     // 创建着色器程序
     shaderProgram = new QOpenGLShaderProgram(this);
     shaderProgram->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/vertex.vert");
@@ -72,7 +71,7 @@ void Qt6RGBARenderer::paintGL()
     }
 }
 
-void Qt6RGBARenderer::refresh()
+void Qt6RGBARenderer::refresh(uint8_t * dstImageData,int dstImageWidth,int dstImageHeight)
 {
     if(finished){
         QImage glImage(dstImageData,dstImageWidth,dstImageHeight,QImage::Format_RGBA8888);

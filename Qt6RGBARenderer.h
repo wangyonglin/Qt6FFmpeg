@@ -33,13 +33,13 @@ private:
     QOpenGLTexture *texture;
     GLuint textureID;
     QImage currentFrame;
-    uchar *dstImageData=nullptr;
-    int dstImageWidth=800;
-    int dstImageHeight=600;
+    // uchar *dstImageData=nullptr;
+    // int dstImageWidth=800;
+    // int dstImageHeight=600;
     bool finished = false;
 signals:
 public slots:
-    void refresh();
+    void refresh(uint8_t * dstImageData,int dstImageWidth,int dstImageHeight);
 
 };
 

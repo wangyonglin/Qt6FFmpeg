@@ -65,10 +65,12 @@ void Qt6DecoderVideo::loop()
                 sync->video_synchronize(pts_time,this->st->start_time,this->st->time_base);
                 if(fmt==QT6_VIDEO_YUV420P){
                     if(swscaler->scale2qyuv420p(dec_ctx,yuvFrame)==0){
-                        emit signalYUV420P(swscaler->data(),swscaler->width(),swscaler->height());
+                        emit refresh(swscaler->data(),swscaler->width(),swscaler->height());
                     }
                 }else if(fmt==QT6_VIDEO_RGBA){
-
+                    if(swscaler->scale2rgba(dec_ctx,yuvFrame)==0){
+                        emit refresh(swscaler->data(),swscaler->width(),swscaler->height());
+                    }
                 }
 
                 av_frame_free(&yuvFrame);

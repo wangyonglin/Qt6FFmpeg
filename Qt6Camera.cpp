@@ -4,7 +4,7 @@ Qt6Camera::Qt6Camera(QWidget *parent)
     : Qt6YUV420PRenderer{parent}
 {
     handle=new Qt6CameraHandler(parent);
-    connect(handle,&Qt6CameraHandler::signalYUV420P,this,&Qt6Camera::slotUpdate,Qt::DirectConnection);
+    connect(handle,&Qt6CameraHandler::signalYUV420P,this,&Qt6Camera::refresh,Qt::DirectConnection);
 }
 
 Qt6Camera::~Qt6Camera()

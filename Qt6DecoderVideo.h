@@ -6,16 +6,14 @@
 #include "Qt6Frame.h"
 #include "Qt6Synchronizer.h"
 #include "Qt6Swscaler.h"
+#include "Qt6Core.h"
 #include <QObject>
 
 class Qt6DecoderVideo : public Qt6Decoder
 {
     Q_OBJECT
 public:
-  typedef  enum {
-        QT6_VIDEO_YUV420P,
-        QT6_VIDEO_RGBA
-    }Qt6PixelFormat;
+
     explicit Qt6DecoderVideo(QObject *parent = nullptr,Qt6PixelFormat = QT6_VIDEO_YUV420P);
     bool start(Qt6Demuxer *demux,Qt6Synchronizer *sync,Qt6Packet * pkt,Qt6Frame *frame);
 signals:
@@ -24,7 +22,7 @@ signals:
 protected:
     virtual void loop() override;
 signals:
-    void signalYUV420P(uint8_t * yuvdata,int yuvwidth,int yuvheight);
+    void refresh(uint8_t * yuvdata,int yuvwidth,int yuvheight);
 private:
     Qt6Swscaler *swscaler;
     Qt6Demuxer *demux;
