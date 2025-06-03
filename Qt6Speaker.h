@@ -6,7 +6,7 @@
 #include <QMediaDevices>
 #include <QAudioSource>
 #include <QAudioSink>
-#include "Qt6Core.h"
+#include "Qt6ConfigContext.h"
 
 
 

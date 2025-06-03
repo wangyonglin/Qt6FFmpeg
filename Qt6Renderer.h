@@ -1,5 +1,5 @@
-#ifndef QT6RGBARENDERER_H
-#define QT6RGBARENDERER_H
+#ifndef QT6RENDERER_H
+#define QT6RENDERER_H
 
 
 #include <QObject>
@@ -12,16 +12,16 @@
 #include <QOpenGLWidget>
 
 
-#include "Qt6Core.h"
+#include "Qt6ConfigContext.h"
 
 
-class QT6FFMPEG_EXPORT Qt6RGBARenderer : public QOpenGLWidget,public QOpenGLFunctions
+class QT6FFMPEG_EXPORT Qt6Renderer : public QOpenGLWidget,public QOpenGLFunctions
 {
     Q_OBJECT
 public:
 
-    explicit Qt6RGBARenderer(QWidget *parent = nullptr);
-    ~Qt6RGBARenderer();
+    explicit Qt6Renderer(QWidget *parent = nullptr);
+    ~Qt6Renderer();
 
 
 public slots:
@@ -39,8 +39,8 @@ private:
     bool finished = false;
 signals:
 public slots:
-    void refresh(uint8_t * dstImageData,int dstImageWidth,int dstImageHeight);
+    void refresh(uint8_t * dstImageData,const QSize & size);
 
 };
 
-#endif // QT6RGBARENDERER_H
+#endif // QT6RENDERER_H

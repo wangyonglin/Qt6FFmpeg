@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QImage>
-#include "Qt6Core.h"
+#include "Qt6Object.h"
 
 typedef enum AVPixelFormat QFFmpegPixelFormat;
 
@@ -13,13 +13,12 @@ class QT6FFMPEG_EXPORT Qt6Swscaler : public QObject
 public:
     explicit Qt6Swscaler(QObject *parent = nullptr);
     ~Qt6Swscaler();
-    int scale2qyuv420p(AVCodecContext *ctx,AVFrame *frame);
+    int scale2qrgbaex(AVFrame *frame,const QSize &size);
     int scale2rgba(AVCodecContext *ctx, AVFrame *frame);
     uint8_t * data();
-    int width();
-    int height();
-
+    QSize getSize();
 private:
+    QSize m_image_size;
     uint8_t *imageframe[4];
     int linesizes[4];
     int imagewidth;

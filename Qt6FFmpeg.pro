@@ -38,22 +38,22 @@ HEADERS += \
     Qt6CameraDecoder.h \
     Qt6CameraDemuxer.h \
     Qt6CameraHandler.h \
-    Qt6Core.h \
-    Qt6Decoder.h \
-    Qt6DecoderAudio.h \
-    Qt6DecoderVideo.h \
-    Qt6Demuxer.h \
-    Qt6FFmpeg_global.h \
+    Qt6ConfigContext.h \
+    Qt6DemuxContext.h \
+    Qt6DemuxProcess.h \
     Qt6Frame.h \
+    Qt6Object.h \
     Qt6Packet.h \
     Qt6Player.h \
-    Qt6RGBARenderer.h \
+    Qt6Process.h \
+    Qt6Renderer.h \
     Qt6Resampler.h \
+    Qt6SoundContext.h \
+    Qt6SoundProcess.h \
     Qt6Speaker.h \
     Qt6Swscaler.h \
-    Qt6Synchronizer.h \
-    Qt6Thread.h \
-    Qt6TransparentPlayer.h \
+    Qt6VideoContext.h \
+    Qt6VideoProcess.h \
     Qt6YUV420PRenderer.h \
     include/Qt6Camera \
     include/Qt6Player \
@@ -64,21 +64,22 @@ SOURCES += \
     Qt6CameraDecoder.cpp \
     Qt6CameraDemuxer.cpp \
     Qt6CameraHandler.cpp \
-    Qt6Core.cpp \
-    Qt6Decoder.cpp \
-    Qt6DecoderAudio.cpp \
-    Qt6DecoderVideo.cpp \
-    Qt6Demuxer.cpp \
+    Qt6ConfigContext.cpp \
+    Qt6DemuxContext.cpp \
+    Qt6DemuxProcess.cpp \
     Qt6Frame.cpp \
+    Qt6Object.cpp \
     Qt6Packet.cpp \
     Qt6Player.cpp \
-    Qt6RGBARenderer.cpp \
+    Qt6Process.cpp \
+    Qt6Renderer.cpp \
     Qt6Resampler.cpp \
+    Qt6SoundContext.cpp \
+    Qt6SoundProcess.cpp \
     Qt6Speaker.cpp \
     Qt6Swscaler.cpp \
-    Qt6Synchronizer.cpp \
-    Qt6Thread.cpp \
-    Qt6TransparentPlayer.cpp \
+    Qt6VideoContext.cpp \
+    Qt6VideoProcess.cpp \
     Qt6YUV420PRenderer.cpp
 
 

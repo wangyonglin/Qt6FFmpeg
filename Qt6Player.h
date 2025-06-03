@@ -2,16 +2,15 @@
 #define QT6PLAYER_H
 
 #include <QWidget>
-#include "Qt6Packet.h"
-#include "Qt6Frame.h"
-#include "Qt6Demuxer.h"
-#include "Qt6Synchronizer.h"
-#include "Qt6YUV420PRenderer.h"
-#include "Qt6Swscaler.h"
-#include "Qt6DecoderVideo.h"
-#include "Qt6DecoderAudio.h"
+#include "Qt6DemuxProcess.h"
 
-class Qt6Player : public Qt6YUV420PRenderer
+#include "Qt6Renderer.h"
+#include "Qt6Swscaler.h"
+#include "Qt6VideoProcess.h"
+#include "Qt6SoundProcess.h"
+#include "Qt6ConfigContext.h"
+
+class Qt6Player : public Qt6Renderer
 {
     Q_OBJECT
 public:
@@ -19,16 +18,14 @@ public:
     ~Qt6Player();
     void play(const QString &url);
 public:
-    Qt6Swscaler * swscaler;
-    Qt6Demuxer *demux=nullptr;
-    Qt6Packet *vpkt=nullptr;
-    Qt6Packet *apkt=nullptr;
-    Qt6Synchronizer *sync=nullptr;
-    Qt6Frame *vframe;
-    Qt6Frame *aframe;
-    Qt6DecoderVideo *decode_video;
-    Qt6DecoderAudio *decode_audio;
+    Qt6ConfigContext *m_config=nullptr;
+    Qt6DemuxProcess *m_demux_process= nullptr;
+    Qt6SoundProcess *m_audio_process=nullptr;
+    Qt6VideoProcess *m_video_process=nullptr;
+   // Qt6VideoProcess *m_video_process=nullptr;
 signals:
+    void start(QThread::Priority pri = QThread::InheritPriority);
+    void stop();
 };
 
 #endif // QT6PLAYER_H

@@ -49,3 +49,30 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 ```
+
+#
+
+```CONFIG(debug, debug|release){  //处理debug
+win32{
+}
+unix{
+    contains(QT_ARCH, arm64){
+                    message("arm64")
+                    }else{
+                    message("x86")
+                    }
+}
+}else{     //处理release
+win32{
+}
+unix{
+}
+```
+    
+
+```
+    Qt6DemuxContext
+        
+    Qt6SoundContext
+    Qt6VideoContext
+```

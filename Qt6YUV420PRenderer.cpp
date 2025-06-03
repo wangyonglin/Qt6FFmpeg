@@ -10,19 +10,15 @@ Qt6YUV420PRenderer::Qt6YUV420PRenderer(QWidget *parent)
 }
 
 
-
-void Qt6YUV420PRenderer::refresh(uint8_t * dstImageData,int dstImageWidth,int dstImageHeight)
+void Qt6YUV420PRenderer::refresh(uint8_t *y, uint8_t *u, uint8_t *v, QSize size)
 {
-    ptr = dstImageData;
-    width = dstImageWidth;
-    height = dstImageHeight;
-    if(ptr){
-        update();
-    }
+    QMutexLocker locker(&mutex);
+    mdst_ydata = y;
+    mdst_udata = u;
+    mdst_vdata = v;
+    mdst_size = size;
+    update();
 }
-
-
-
 
 void Qt6YUV420PRenderer::initializeGL()
 {
@@ -91,9 +87,9 @@ void Qt6YUV420PRenderer::resizeGL(int w, int h)
 
 void Qt6YUV420PRenderer::paintGL()
 {
-    if(!ptr) return;
-
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    QMutexLocker locker(&mutex);
+    //glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    glClearColor(0.2, 0.3, 0.3, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glDisable(GL_DEPTH_TEST);
 
@@ -104,25 +100,38 @@ void Qt6YUV420PRenderer::paintGL()
     m_program.setAttributeBuffer("vertexIn",GL_FLOAT, 0, 2, 2*sizeof(GLfloat));
     m_program.setAttributeBuffer("textureIn",GL_FLOAT,2 * 4 * sizeof(GLfloat),2,2*sizeof(GLfloat));
 
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D,idY);
-    glTexImage2D(GL_TEXTURE_2D,0,GL_RED,width,height,0,GL_RED,GL_UNSIGNED_BYTE,ptr);
+    if(mdst_size.width() <0|| mdst_size.height() <0 )return;
+
+    if(mdst_ydata){
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D,idY);
+        glTexImage2D(GL_TEXTURE_2D,0,GL_RED,mdst_size.width(),mdst_size.height(),0,GL_RED,GL_UNSIGNED_BYTE,
+                    mdst_ydata);
+    }
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-    glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D,idU);
-    glTexImage2D(GL_TEXTURE_2D,0,GL_RED,width >> 1,height >> 1,0,GL_RED,GL_UNSIGNED_BYTE,ptr + width*height);
+    if(mdst_udata){
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D,idU);
+        glTexImage2D(GL_TEXTURE_2D,0,GL_RED,mdst_size.width() >> 1,mdst_size.height() >> 1,0,GL_RED,GL_UNSIGNED_BYTE,
+                    mdst_udata);
+    }
+
+
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    if(mdst_vdata){
+        glActiveTexture(GL_TEXTURE2);
+        glBindTexture(GL_TEXTURE_2D,idV);
+        glTexImage2D(GL_TEXTURE_2D,0,GL_RED,mdst_size.width() >> 1,mdst_size.height() >> 1,0,GL_RED,GL_UNSIGNED_BYTE,
+                    mdst_vdata);
+    }
 
-    glActiveTexture(GL_TEXTURE2);
-    glBindTexture(GL_TEXTURE_2D,idV);
-    glTexImage2D(GL_TEXTURE_2D,0,GL_RED,width >> 1,height >> 1,0,GL_RED,GL_UNSIGNED_BYTE,ptr + width*height*5/4);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);

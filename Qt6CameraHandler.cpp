@@ -1,7 +1,7 @@
 #include "Qt6CameraHandler.h"
 
 Qt6CameraHandler::Qt6CameraHandler(QObject *parent)
-    : Qt6Thread{parent}
+    : Qt6Process{parent}
 {
     camera_demuxer = new Qt6CameraDemuxer(parent);
     video_decoder = new Qt6CameraDecoder(parent);
@@ -14,7 +14,7 @@ void Qt6CameraHandler::openUrl(const QString &url)
     video_decoder->open(camera_demuxer->ifmt_ctx,AVMEDIA_TYPE_VIDEO);
 }
 
-void Qt6CameraHandler::loop()
+void Qt6CameraHandler::loopping()
 {
         AVPacket pkt;
         if(camera_demuxer->read(&pkt)==0){
@@ -22,9 +22,9 @@ void Qt6CameraHandler::loop()
             {
                 AVFrame* frame= video_decoder->read(&pkt);
                 if(frame){
-                    if(videoswscaler->scale2qyuv420p(video_decoder->codec_ctx,frame)==0){
-                      emit signalYUV420P(videoswscaler->data(),videoswscaler->width(),videoswscaler->height());
-                    }
+                    // if(videoswscaler->scale2qyuv420p(video_decoder->codec_ctx,frame)==0){
+                    //   emit signalYUV420P(videoswscaler->data(),videoswscaler->width(),videoswscaler->height());
+                    // }
                 av_frame_free(&frame);
                 }
 
@@ -32,4 +32,9 @@ void Qt6CameraHandler::loop()
             av_packet_unref(&pkt);
         }
         //QThread::sleep(1000);
+}
+
+void Qt6CameraHandler::opening()
+{
+
 }

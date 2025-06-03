@@ -3,7 +3,7 @@
 #include <QObject>
 #include <QString>
 #include <QDebug>
-#include "Qt6Core.h"
+#include "Qt6Object.h"
 
 
 class QT6FFMPEG_EXPORT Qt6CameraDemuxer : public QObject

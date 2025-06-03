@@ -1,22 +1,22 @@
-#include "Qt6RGBARenderer.h"
+#include "Qt6Renderer.h"
 #include <QOpenGLExtraFunctions>
 #include <QDebug>
 #include <QImageReader>
 #include <QResizeEvent>
 
-Qt6RGBARenderer::Qt6RGBARenderer(QWidget *parent)
+Qt6Renderer::Qt6Renderer(QWidget *parent)
     :QOpenGLWidget(parent)
 {
 
 }
 
-Qt6RGBARenderer::~Qt6RGBARenderer()
+Qt6Renderer::~Qt6Renderer()
 {
 
 }
 
 
-void Qt6RGBARenderer::initializeGL()
+void Qt6Renderer::initializeGL()
 {
     initializeOpenGLFunctions();
     glClearColor(0.0f, 0.0f, 0.0f,1.0f);  // 设置背景色
@@ -43,13 +43,13 @@ void Qt6RGBARenderer::initializeGL()
     finished=true;
 }
 
-void Qt6RGBARenderer::resizeGL(int w, int h)
+void Qt6Renderer::resizeGL(int w, int h)
 {
     if(h<=0) h=1;
     glViewport(0,0,w,h);
 }
 
-void Qt6RGBARenderer::paintGL()
+void Qt6Renderer::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     if (!currentFrame.isNull()) {
@@ -71,10 +71,10 @@ void Qt6RGBARenderer::paintGL()
     }
 }
 
-void Qt6RGBARenderer::refresh(uint8_t * dstImageData,int dstImageWidth,int dstImageHeight)
+void Qt6Renderer::refresh(uint8_t * dstImageData,const QSize & size)
 {
     if(finished){
-        QImage glImage(dstImageData,dstImageWidth,dstImageHeight,QImage::Format_RGBA8888);
+        QImage glImage(dstImageData,size.width(),size.height(),QImage::Format_RGBA8888);
         currentFrame = glImage.copy();
         this->update();
     }

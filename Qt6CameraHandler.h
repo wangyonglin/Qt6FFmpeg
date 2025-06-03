@@ -5,11 +5,10 @@
 #include "Qt6CameraDemuxer.h"
 #include "Qt6YUV420PRenderer.h"
 #include "Qt6CameraDecoder.h"
-#include "Qt6Thread.h"
 #include "Qt6Swscaler.h"
-#include "Qt6Core.h"
-
-class Qt6CameraHandler : public Qt6Thread
+#include "Qt6Object.h"
+#include "Qt6Process.h"
+class Qt6CameraHandler : public Qt6Process
 {
     Q_OBJECT
 public:
@@ -21,10 +20,15 @@ public:
 signals:
     void signalUpdate(QByteArray yuvdata, int yuvwidth, int yuvheight);
     void signalYUV420P(uint8_t * yuvdata,int yuvwidth,int yuvheight);
-    // Qt6FFmpegThread interface
-protected:
-    virtual void loop() override;
+    // Qt6ThreadObject interface
 
+    // Qt6Process interface
+protected:
+    virtual void loopping() override;
+
+    // Qt6Process interface
+protected:
+    virtual void opening() override;
 };
 
 #endif // QT6CAMERAHANDLER_H

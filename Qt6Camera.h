@@ -5,7 +5,6 @@
 #include "Qt6CameraDemuxer.h"
 #include "Qt6YUV420PRenderer.h"
 #include "Qt6CameraDecoder.h"
-#include "Qt6Thread.h"
 #include "Qt6CameraHandler.h"
 class Qt6Camera : public Qt6YUV420PRenderer
 {

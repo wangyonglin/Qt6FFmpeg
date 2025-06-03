@@ -1,7 +1,7 @@
 #ifndef FFmpegResampler_H
 #define FFmpegResampler_H
 
-#include "Qt6Core.h"
+#include "Qt6ConfigContext.h"
 
 #include <QObject>
 #include <QDebug>
@@ -9,8 +9,6 @@
 class Qt6Resampler :public QObject{
 public:
     explicit Qt6Resampler(QObject *parent = nullptr);
-
-
     int init(AVCodecContext *dec_ctx, int64_t dst_ch_layout, int dst_rate, AVSampleFormat dst_sample_fmt);
     QByteArray convert(AVFrame *frame);
     void release();
