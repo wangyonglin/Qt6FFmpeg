@@ -36,7 +36,14 @@ extern "C" {
 #define QT6FFMPEG_EXPORT Q_DECL_IMPORT
 #endif
 
-
+typedef enum
+{
+    NullPointerException=-4,
+    ErrorException=-3,
+    Failed=-2,     ///<停止状态，包括从未启动过和启动后被停止
+    Finished=-1,    ///<运行状态
+    Successfuled     ///<暂停状态
+} Qt6Result;
 
 class Qt6Object : public QObject
 {

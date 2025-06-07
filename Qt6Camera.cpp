@@ -1,40 +1,33 @@
-#include "Qt6CameraHandler.h"
+#include "Qt6Camera.h"
 
-Qt6CameraHandler::Qt6CameraHandler(QObject *parent)
-    : Qt6Process{parent}
+Qt6Camera::Qt6Camera(QWidget *parent)
+    : Qt6Renderer{parent}
 {
-    camera_demuxer = new Qt6CameraDemuxer(parent);
-    video_decoder = new Qt6CameraDecoder(parent);
-    videoswscaler = new Qt6Swscaler(parent);
+    camera_process = new Qt6CameraProcess(parent);
+    connect(camera_process,&Qt6CameraProcess::refresh,this,&Qt6Renderer::refresh,Qt::DirectConnection);
 }
 
-void Qt6CameraHandler::openUrl(const QString &url)
+Qt6Camera::~Qt6Camera()
 {
-    camera_demuxer->open(url);
-    video_decoder->open(camera_demuxer->ifmt_ctx,AVMEDIA_TYPE_VIDEO);
+    camera_process->deleteLater();
 }
 
-void Qt6CameraHandler::loopping()
+void Qt6Camera::play(const QString &url)
 {
-        AVPacket pkt;
-        if(camera_demuxer->read(&pkt)==0){
-            if (pkt.stream_index == camera_demuxer->video_stream_index)
-            {
-                AVFrame* frame= video_decoder->read(&pkt);
-                if(frame){
-                    // if(videoswscaler->scale2qyuv420p(video_decoder->codec_ctx,frame)==0){
-                    //   emit signalYUV420P(videoswscaler->data(),videoswscaler->width(),videoswscaler->height());
-                    // }
-                av_frame_free(&frame);
-                }
-
-            }
-            av_packet_unref(&pkt);
-        }
-        //QThread::sleep(1000);
+    camera_process->url(url);
+    camera_process->start();
 }
 
-void Qt6CameraHandler::opening()
+void Qt6Camera::setting(const QSize &size,int framerate)
 {
-
+    camera_process->setting(size,framerate);
 }
+
+void Qt6Camera::stop()
+{
+    camera_process->stop();
+}
+
+
+
+

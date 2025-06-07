@@ -1,7 +1,7 @@
 #ifndef FFmpegResampler_H
 #define FFmpegResampler_H
 
-#include "Qt6ConfigContext.h"
+#include "Qt6Object.h"
 
 #include <QObject>
 #include <QDebug>

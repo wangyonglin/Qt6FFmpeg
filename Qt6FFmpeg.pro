@@ -35,25 +35,20 @@ DISTFILES += \
 
 HEADERS += \
     Qt6Camera.h \
-    Qt6CameraDecoder.h \
-    Qt6CameraDemuxer.h \
-    Qt6CameraHandler.h \
-    Qt6ConfigContext.h \
-    Qt6DemuxContext.h \
-    Qt6DemuxProcess.h \
+    Qt6CameraContext.h \
+    Qt6CameraProcess.h \
+    Qt6FFmpegContext.h \
+    Qt6FFmpegProcess.h \
     Qt6Frame.h \
     Qt6Object.h \
     Qt6Packet.h \
     Qt6Player.h \
-    Qt6Process.h \
     Qt6Renderer.h \
     Qt6Resampler.h \
-    Qt6SoundContext.h \
-    Qt6SoundProcess.h \
     Qt6Speaker.h \
     Qt6Swscaler.h \
-    Qt6VideoContext.h \
-    Qt6VideoProcess.h \
+    Qt6Syncthing.h \
+    Qt6Thread.h \
     Qt6YUV420PRenderer.h \
     include/Qt6Camera \
     include/Qt6Player \
@@ -61,25 +56,20 @@ HEADERS += \
 
 SOURCES += \
     Qt6Camera.cpp \
-    Qt6CameraDecoder.cpp \
-    Qt6CameraDemuxer.cpp \
-    Qt6CameraHandler.cpp \
-    Qt6ConfigContext.cpp \
-    Qt6DemuxContext.cpp \
-    Qt6DemuxProcess.cpp \
+    Qt6CameraContext.cpp \
+    Qt6CameraProcess.cpp \
+    Qt6FFmpegContext.cpp \
+    Qt6FFmpegProcess.cpp \
     Qt6Frame.cpp \
     Qt6Object.cpp \
     Qt6Packet.cpp \
     Qt6Player.cpp \
-    Qt6Process.cpp \
     Qt6Renderer.cpp \
     Qt6Resampler.cpp \
-    Qt6SoundContext.cpp \
-    Qt6SoundProcess.cpp \
     Qt6Speaker.cpp \
     Qt6Swscaler.cpp \
-    Qt6VideoContext.cpp \
-    Qt6VideoProcess.cpp \
+    Qt6Syncthing.cpp \
+    Qt6Thread.cpp \
     Qt6YUV420PRenderer.cpp
 
 

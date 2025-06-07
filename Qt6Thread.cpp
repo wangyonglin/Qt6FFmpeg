@@ -1,16 +1,16 @@
-#include "Qt6Process.h"
+#include "Qt6Thread.h"
 
 
 
-Qt6Process::Qt6Process(QObject *parent)
+Qt6Thread::Qt6Thread(QObject *parent)
     : QThread(parent),
     pauseFlag(false),
-    stopFlag(false),
-    firstFlag(false)
+    stopFlag(false)
+
 {}
 
 
-Qt6Process::State Qt6Process::state() const
+Qt6Thread::State Qt6Thread::state() const
 {
     State s = Stoped;
     if (!QThread::isRunning())
@@ -28,15 +28,17 @@ Qt6Process::State Qt6Process::state() const
     return s;
 }
 
-void Qt6Process::start(QThread::Priority pri)
+void Qt6Thread::start(QThread::Priority pri)
 {
-    firstFlag=true;
-    QThread::start(pri);
+    if(!QThread::isRunning()){
+        QThread::start(pri);
+    }
+
 }
 
 
 
-void Qt6Process::stop()
+void Qt6Thread::stop()
 {
     if (QThread::isRunning())
     {
@@ -47,7 +49,7 @@ void Qt6Process::stop()
     }
 }
 
-void Qt6Process::pause()
+void Qt6Thread::pause()
 {
     if (QThread::isRunning())
     {
@@ -55,9 +57,9 @@ void Qt6Process::pause()
     }
 }
 
-void Qt6Process::resume()
+void Qt6Thread::resume()
 {
-    firstFlag=true;
+
     if (QThread::isRunning())
     {
         pauseFlag = false;
@@ -65,17 +67,16 @@ void Qt6Process::resume()
     }
 }
 
-void Qt6Process::run()
+
+
+
+void Qt6Thread::run()
 {
     //qDebug() << "enter thread : " << QThread::currentThreadId();
 
-    while (!stopFlag)
+    if (!stopFlag)
     {
-        if(firstFlag){
-            opening();
-            firstFlag=false;
-        }
-        loopping(); // do something...
+        process(); // do something...
 
         if (pauseFlag)
         {

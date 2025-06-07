@@ -1,5 +1,5 @@
-#ifndef QT6PROCESS_H
-#define QT6PROCESS_H
+#ifndef Qt6LOOPPING_H
+#define Qt6LOOPPING_H
 
 #include <QThread>
 #include <QObject>
@@ -7,11 +7,11 @@
 #include <QMutex>
 #include <QWaitCondition>
 
-class Qt6Process : public QThread
+class Qt6Thread : public QThread
 {
     Q_OBJECT
 public:
-    explicit Qt6Process(QObject *parent = nullptr);
+    explicit Qt6Thread(QObject *parent = nullptr);
     enum State
     {
 
@@ -30,14 +30,14 @@ public slots:
     void resume();
 protected:
     virtual void run() override final;
-    virtual void loopping()=0;
-    virtual void opening()=0;
+    virtual void process()=0;
 public:
-    std::atomic_bool firstFlag;
     std::atomic_bool pauseFlag;
     volatile std::atomic_bool stopFlag;
     QMutex mutex;
     QWaitCondition condition;
+signals:
+
 };
 
-#endif // QT6PROCESS_H
+#endif // Qt6LOOPPING_H

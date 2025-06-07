@@ -12,7 +12,7 @@
 #include <QOpenGLWidget>
 
 
-#include "Qt6ConfigContext.h"
+#include "Qt6Object.h"
 
 
 class QT6FFMPEG_EXPORT Qt6Renderer : public QOpenGLWidget,public QOpenGLFunctions

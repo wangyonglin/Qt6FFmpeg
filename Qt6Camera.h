@@ -1,34 +1,24 @@
-#ifndef QT6CAMERAHANDLER_H
-#define QT6CAMERAHANDLER_H
+#ifndef QT6CAMERA_H
+#define QT6CAMERA_H
 #include <QString>
 #include <QObject>
-#include "Qt6CameraDemuxer.h"
+#include "Qt6CameraContext.h"
 #include "Qt6YUV420PRenderer.h"
-#include "Qt6CameraDecoder.h"
+#include "Qt6CameraProcess.h"
 #include "Qt6Swscaler.h"
 #include "Qt6Object.h"
-#include "Qt6Process.h"
-class Qt6CameraHandler : public Qt6Process
+#include "Qt6Renderer.h"
+class Qt6Camera : public Qt6Renderer
 {
     Q_OBJECT
 public:
-    explicit Qt6CameraHandler(QObject *parent = nullptr);
-    Qt6CameraDemuxer *camera_demuxer;
-    Qt6CameraDecoder *video_decoder;
-    Qt6Swscaler *videoswscaler;
-    void openUrl(const QString &url);
-signals:
-    void signalUpdate(QByteArray yuvdata, int yuvwidth, int yuvheight);
-    void signalYUV420P(uint8_t * yuvdata,int yuvwidth,int yuvheight);
-    // Qt6ThreadObject interface
-
-    // Qt6Process interface
-protected:
-    virtual void loopping() override;
-
-    // Qt6Process interface
-protected:
-    virtual void opening() override;
+    explicit Qt6Camera(QWidget *parent = nullptr);
+    ~Qt6Camera();
+    Qt6CameraProcess *camera_process= nullptr;
+public slots:
+    void play(const QString &url);
+    void setting(const QSize &size,int framerate=25);
+    void stop();
 };
 
-#endif // QT6CAMERAHANDLER_H
+#endif // QT6CAMERA_H
